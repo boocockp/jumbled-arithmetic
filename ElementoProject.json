@@ -13,7 +13,11 @@
         {
           "id": "page_1",
           "name": "Main Page",
-          "properties": {},
+          "properties": {
+            "styles": {
+              "paddingTop": "0"
+            }
+          },
           "elements": [
             {
               "id": "data_12",
@@ -266,7 +270,7 @@
                 "styles": {
                   "fontWeight": "bold",
                   "fontFamily": "\"Jersey 10\"",
-                  "fontSize": "48",
+                  "fontSize": "36",
                   "color": "blue"
                 }
               },
@@ -687,7 +691,7 @@
                   "properties": {
                     "layout": "horizontal",
                     "styles": {
-                      "minHeight": "57",
+                      "minHeight": "52",
                       "border": "1px solid lightgray",
                       "padding": "5",
                       "minWidth": "280"
@@ -736,7 +740,7 @@
                   "properties": {
                     "layout": "horizontal",
                     "styles": {
-                      "minHeight": "57",
+                      "minHeight": "52",
                       "border": "1px solid lightgray",
                       "padding": "5px",
                       "minWidth": "210"
@@ -785,7 +789,8 @@
                   "properties": {
                     "layout": "horizontal",
                     "styles": {
-                      "paddingLeft": "84"
+                      "paddingLeft": "90",
+                      "marginBottom": "20"
                     }
                   },
                   "elements": [
@@ -796,9 +801,8 @@
                         "dropAction": {
                           "expr": "ClearAndSetNum(Num1, $droppedItem)"
                         },
-                        "styles": {
-                          "minHeight": "70"
-                        }
+                        "styles": {},
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -845,7 +849,9 @@
                   "name": "Row 2",
                   "properties": {
                     "layout": "horizontal",
-                    "styles": {}
+                    "styles": {
+                      "marginBottom": "20"
+                    }
                   },
                   "elements": [
                     {
@@ -856,9 +862,9 @@
                           "expr": "ClearAndSetOp(Op1, $droppedItem)"
                         },
                         "styles": {
-                          "height": "50",
-                          "minHeight": "65"
-                        }
+                          "paddingLeft": "10"
+                        },
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -905,8 +911,9 @@
                           "expr": "ClearAndSetNum(Num2, $droppedItem)"
                         },
                         "styles": {
-                          "minHeight": "70"
-                        }
+                          "paddingLeft": "10"
+                        },
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -951,8 +958,7 @@
                       "properties": {
                         "content": "=",
                         "styles": {
-                          "fontSize": "32",
-                          "paddingTop": "10"
+                          "fontSize": "26"
                         }
                       },
                       "kind": "Text"
@@ -965,8 +971,7 @@
                           "expr": "Result1"
                         },
                         "styles": {
-                          "fontSize": "32",
-                          "paddingTop": "10"
+                          "fontSize": "26"
                         }
                       },
                       "kind": "Text"
@@ -978,7 +983,10 @@
                   "id": "block_39",
                   "name": "Row 3",
                   "properties": {
-                    "layout": "horizontal"
+                    "layout": "horizontal",
+                    "styles": {
+                      "marginBottom": "20"
+                    }
                   },
                   "elements": [
                     {
@@ -989,9 +997,9 @@
                           "expr": "ClearAndSetOp(Op2, $droppedItem)"
                         },
                         "styles": {
-                          "height": "50",
-                          "minHeight": "65"
-                        }
+                          "paddingLeft": "10"
+                        },
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -1038,8 +1046,9 @@
                           "expr": "ClearAndSetNum(Num3, $droppedItem)"
                         },
                         "styles": {
-                          "minHeight": "70"
-                        }
+                          "paddingLeft": "10"
+                        },
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -1079,27 +1088,25 @@
                       "kind": "Block"
                     },
                     {
-                      "id": "text_61",
+                      "id": "text_69",
                       "name": "Equals 2",
                       "properties": {
                         "content": "=",
                         "styles": {
-                          "fontSize": "32",
-                          "paddingTop": "10"
+                          "fontSize": "26"
                         }
                       },
                       "kind": "Text"
                     },
                     {
-                      "id": "text_62",
+                      "id": "text_70",
                       "name": "Result 2 Display",
                       "properties": {
                         "content": {
                           "expr": "Result2"
                         },
                         "styles": {
-                          "fontSize": "32",
-                          "paddingTop": "10"
+                          "fontSize": "26"
                         }
                       },
                       "kind": "Text"
@@ -1122,9 +1129,9 @@
                           "expr": "ClearAndSetOp(Op3, $droppedItem)"
                         },
                         "styles": {
-                          "height": "50",
-                          "minHeight": "65"
-                        }
+                          "paddingLeft": "10"
+                        },
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -1171,9 +1178,9 @@
                           "expr": "ClearAndSetNum(Num4, $droppedItem)"
                         },
                         "styles": {
-                          "height": "50",
-                          "minHeight": "65"
-                        }
+                          "paddingLeft": "10"
+                        },
+                        "layout": "none"
                       },
                       "elements": [
                         {
@@ -1218,8 +1225,7 @@
                       "properties": {
                         "content": "=",
                         "styles": {
-                          "fontSize": "32",
-                          "paddingTop": "10"
+                          "fontSize": "26"
                         }
                       },
                       "kind": "Text"
@@ -1232,8 +1238,7 @@
                           "expr": "Result3"
                         },
                         "styles": {
-                          "fontSize": "32",
-                          "paddingTop": "10"
+                          "fontSize": "26"
                         }
                       },
                       "kind": "Text"
