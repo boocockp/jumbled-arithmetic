@@ -1,0 +1,1541 @@
+{
+  "id": "project_1",
+  "name": "Jumbled Arithmetic",
+  "properties": {},
+  "elements": [
+    {
+      "id": "app_1",
+      "name": "Main App",
+      "properties": {
+        "fonts": "Jersey 10"
+      },
+      "elements": [
+        {
+          "id": "page_1",
+          "name": "Main Page",
+          "properties": {},
+          "elements": [
+            {
+              "id": "data_12",
+              "name": "Status",
+              "properties": {
+                "initialValue": {
+                  "expr": "'Ready'"
+                }
+              },
+              "kind": "Data"
+            },
+            {
+              "id": "data_13",
+              "name": "Score",
+              "properties": {
+                "initialValue": {
+                  "expr": "0"
+                }
+              },
+              "kind": "Data"
+            },
+            {
+              "id": "data_14",
+              "name": "Round Skipped",
+              "properties": {
+                "initialValue": {
+                  "expr": "false"
+                }
+              },
+              "kind": "Data"
+            },
+            {
+              "id": "calculation_36",
+              "name": "Points Threshold",
+              "properties": {
+                "calculation": {
+                  "expr": "20"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_37",
+              "name": "Bonus",
+              "properties": {
+                "calculation": {
+                  "expr": "30"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_38",
+              "name": "Points Factor",
+              "properties": {
+                "calculation": {
+                  "expr": "1"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_21",
+              "name": "Is Round Won",
+              "properties": {
+                "calculation": {
+                  "expr": "PointsScored > 0"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_35",
+              "name": "Is Round Exact",
+              "properties": {
+                "calculation": {
+                  "expr": "ResultExact"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_22",
+              "name": "Is Round Failed",
+              "properties": {
+                "calculation": {
+                  "expr": "And(IsRoundComplete, PointsScored == 0)"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_23",
+              "name": "When Round Complete",
+              "properties": {
+                "calculation": {
+                  "expr": "IsRoundComplete"
+                },
+                "whenTrueAction": {
+                  "expr": "EndRound()"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_24",
+              "name": "Is Round Complete",
+              "properties": {
+                "calculation": {
+                  "expr": "Or(Eq(Target, Result), RoundSkipped, Not(GameRunning))"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_25",
+              "name": "Round In Play",
+              "properties": {
+                "calculation": {
+                  "expr": "Not(IsRoundComplete)"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_26",
+              "name": "Game Running",
+              "properties": {
+                "calculation": {
+                  "expr": "Or(Status == 'Playing', Status == 'Paused')"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "timer_1",
+              "name": "Game Timer",
+              "properties": {
+                "period": 180,
+                "interval": 1,
+                "show": false,
+                "endAction": {
+                  "expr": "EndGame()"
+                }
+              },
+              "kind": "Timer"
+            },
+            {
+              "id": "function_7",
+              "name": "Points",
+              "properties": {
+                "calculation": {
+                  "expr": "let gap = Math.abs(Target - Result)\nlet bonus = If(Eq(Target, Result), Bonus, 0)\nlet res = If(NotNull(Result), Max(0, (PointsThreshold - gap) * PointsFactor) + bonus, 0)\n//Log('Points', res)\nres\n"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_8",
+              "name": "Setup New Round",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "let numbers = RandomListFrom(Range(5, 20), 4)\nlet ops = Shuffle(['+', '-', 'x'])\nlet op1 = ops[0], op2 = ops[1], op3 = ops[2]\nlet num1 = numbers[0], num2 = numbers[1], num3 = numbers[2], num4 = numbers[3]\nlet result1 = Calc(num1, op1, num2)\nlet result2 = Calc(result1, op2, num3)\nlet result3 = Calc(result2, op3, num4)\nSet(CorrectNumbers, numbers)\nSet(CorrectOperations, ops)\nSet(Operations, Shuffle(ops))\nSet(Numbers, Shuffle(numbers))\nSet(Target, result3)\nReset(Num1, Num2, Num3, Num4)\nReset(Op1, Op2, Op3)\nReset(PointsScored, ResultExact)"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_9",
+              "name": "Start New Game",
+              "properties": {
+                "calculation": {
+                  "expr": "Reset(Score)\nReset(GameTimer)\nSet(Status, 'Playing')\nStartNewRound()\nGameTimer.Start()"
+                },
+                "action": true
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_10",
+              "name": "Start New Round",
+              "properties": {
+                "calculation": {
+                  "expr": "Reset(RoundSkipped)\nSetupNewRound()"
+                },
+                "action": true
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_11",
+              "name": "End Round",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "Set(Score, Score + Points())\nSet(PointsScored, Points())\nSet(ResultExact, Eq(Target, Result))\nSet(Num1, ItemAt(CorrectNumbers, 0))\nSet(Num2, ItemAt(CorrectNumbers, 1))\nSet(Num3, ItemAt(CorrectNumbers, 2))\nSet(Num4, ItemAt(CorrectNumbers, 3))\nSet(Op1, ItemAt(CorrectOperations, 0))\nSet(Op2, ItemAt(CorrectOperations, 1))\nSet(Op3, ItemAt(CorrectOperations, 2))\n"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_12",
+              "name": "End Game",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "Set(Status, 'Ended')"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_13",
+              "name": "Pause Game",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "Set(Status, 'Paused')\nGameTimer.Stop()"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_14",
+              "name": "Continue Game",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "Set(Status, 'Playing')\nGameTimer.Start()"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "text_1",
+              "name": "Title",
+              "properties": {
+                "content": "Sum Mix-up",
+                "styles": {
+                  "fontWeight": "bold",
+                  "fontFamily": "\"Jersey 10\"",
+                  "fontSize": "48",
+                  "color": "blue"
+                }
+              },
+              "kind": "Text"
+            },
+            {
+              "id": "data_15",
+              "name": "Correct Numbers",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_16",
+              "name": "Correct Operations",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_6",
+              "name": "Numbers",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_7",
+              "name": "Operations",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_8",
+              "name": "Num 1",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_9",
+              "name": "Num 2",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_10",
+              "name": "Num 3",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_11",
+              "name": "Num 4",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "calculation_5",
+              "name": "Numbers Available",
+              "properties": {
+                "calculation": {
+                  "expr": "WithoutItems(Numbers, Num1, Num2, Num3, Num4)"
+                },
+                "show": false,
+                "styles": {
+                  "border": "2px solid gray"
+                }
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_8",
+              "name": "Operations Available",
+              "properties": {
+                "calculation": {
+                  "expr": "WithoutItems(Operations, Op1, Op2, Op3)"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "data_2",
+              "name": "Op 1",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_3",
+              "name": "Op 2",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_4",
+              "name": "Op 3",
+              "properties": {},
+              "kind": "Data"
+            },
+            {
+              "id": "data_5",
+              "name": "Target",
+              "properties": {
+                "initialValue": {
+                  "expr": "''"
+                }
+              },
+              "kind": "Data"
+            },
+            {
+              "id": "data_17",
+              "name": "Points Scored",
+              "properties": {
+                "initialValue": {
+                  "expr": "0"
+                }
+              },
+              "kind": "Data"
+            },
+            {
+              "id": "data_18",
+              "name": "Result Exact",
+              "properties": {
+                "initialValue": {
+                  "expr": "false"
+                }
+              },
+              "kind": "Data"
+            },
+            {
+              "id": "calculation_1",
+              "name": "Result 1",
+              "properties": {
+                "calculation": {
+                  "expr": "Calc(Num1, Op1, Num2)"
+                },
+                "styles": {
+                  "fontSize": "24"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_2",
+              "name": "Result 2",
+              "properties": {
+                "calculation": {
+                  "expr": "Calc(Result1, Op2, Num3)"
+                },
+                "styles": {
+                  "fontSize": "24"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_3",
+              "name": "Result 3",
+              "properties": {
+                "calculation": {
+                  "expr": "Calc(Result2, Op3, Num4)"
+                },
+                "styles": {
+                  "fontSize": "24"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_34",
+              "name": "Result",
+              "properties": {
+                "show": false,
+                "calculation": {
+                  "expr": "If(NotNull(Result3), Result3)"
+                }
+              },
+              "kind": "Calculation"
+            },
+            {
+              "id": "function_1",
+              "name": "Calc",
+              "properties": {
+                "input1": "a",
+                "input2": "op",
+                "input3": "b",
+                "calculation": {
+                  "expr": "If(Or(IsNull(a), IsNull(b)), null, If(op == '+', a + b, If(op == '-', a - b, If(op == 'x', a * b, null))))"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_4",
+              "name": "Clear",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "If(Eq(data, item), Set(data, null))"
+                },
+                "input1": "data",
+                "input2": "item"
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_5",
+              "name": "Clear All",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "Clear(Op1, item)\nClear(Op2, item)\nClear(Op3, item)\nClear(Num1, item)\nClear(Num2, item)\nClear(Num3, item)\nClear(Num4, item)\n"
+                },
+                "input1": "item"
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_16",
+              "name": "Clear And Set",
+              "properties": {
+                "input1": "data",
+                "input2": "item",
+                "action": true,
+                "calculation": {
+                  "expr": "ClearAll(item)\nSet(data, item)"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_6",
+              "name": "Clear And Set Op",
+              "properties": {
+                "input1": "data",
+                "input2": "item",
+                "action": true,
+                "calculation": {
+                  "expr": "If(ListContains(Operations, item), ClearAndSet(data, item))"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_15",
+              "name": "Clear And Set Num",
+              "properties": {
+                "input1": "data",
+                "input2": "item",
+                "action": true,
+                "calculation": {
+                  "expr": "If(ListContains(Numbers, item), ClearAndSet(data, item))"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "dialog_1",
+              "name": "Instructions",
+              "properties": {
+                "initiallyOpen": false,
+                "layout": "vertical",
+                "showCloseButton": true,
+                "styles": {
+                  "padding": "2em"
+                }
+              },
+              "elements": [
+                {
+                  "id": "text_38",
+                  "name": "Instructions Text",
+                  "properties": {
+                    "content": "You have to ...\n\n\nClick Next Word after each word to get another one.\n\n\n<b>Tips</b>\n<ul>\n  <li>Some of your results could be negative numbers</li>\n</ul>\n\nYou have 3 minutes to do as much as you can.",
+                    "allowHtml": true
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "button_1",
+                  "name": "Start Game 2",
+                  "properties": {
+                    "action": {
+                      "expr": "StartNewGame()\nInstructions.Close()"
+                    },
+                    "show": {
+                      "expr": "Not(GameRunning)"
+                    },
+                    "content": "Start Game",
+                    "appearance": "filled"
+                  },
+                  "kind": "Button"
+                }
+              ],
+              "kind": "Dialog"
+            },
+            {
+              "id": "block_21",
+              "name": "Stats Layout",
+              "properties": {
+                "layout": "horizontal wrapped",
+                "styles": {
+                  "fontSize": "24"
+                }
+              },
+              "elements": [
+                {
+                  "id": "text_39",
+                  "name": "Score Display",
+                  "properties": {
+                    "content": {
+                      "expr": "Score + \" points\""
+                    },
+                    "styles": {
+                      "fontSize": "inherit",
+                      "color": "blue",
+                      "marginRight": "100"
+                    },
+                    "show": {
+                      "expr": "Or(GameRunning, Status == 'Ended')"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_40",
+                  "name": "Time Display",
+                  "properties": {
+                    "content": {
+                      "expr": "Ceiling(GameTimer. remainingTime) + \"s left\""
+                    },
+                    "styles": {
+                      "fontSize": "inherit",
+                      "color": "green"
+                    },
+                    "show": {
+                      "expr": "GameRunning"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_41",
+                  "name": "Game Over",
+                  "properties": {
+                    "content": "Game Over",
+                    "styles": {
+                      "fontSize": "inherit",
+                      "color": "white",
+                      "backgroundColor": "green",
+                      "padding": "0 0.5em",
+                      "borderRadius": "8px"
+                    },
+                    "show": {
+                      "expr": "Status == 'Ended'"
+                    }
+                  },
+                  "kind": "Text"
+                }
+              ],
+              "kind": "Block"
+            },
+            {
+              "id": "block_22",
+              "name": "Ready Panel",
+              "properties": {
+                "show": {
+                  "expr": "Status == 'Ready'"
+                },
+                "styles": {
+                  "padding": "0"
+                }
+              },
+              "elements": [
+                {
+                  "id": "text_42",
+                  "name": "Title",
+                  "properties": {
+                    "content": "Welcome!",
+                    "styles": {
+                      "color": "blue",
+                      "fontFamily": "\"Jersey 10\"",
+                      "fontSize": "36"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_43",
+                  "name": "Ready Text",
+                  "properties": {
+                    "content": "Do what you need to do\n\nClick Instructions for full details\n\nOr Start Game to dive straight in!",
+                    "styles": {
+                      "fontSize": "20"
+                    }
+                  },
+                  "kind": "Text"
+                }
+              ],
+              "kind": "Block"
+            },
+            {
+              "id": "block_26",
+              "name": "Play Panel",
+              "properties": {
+                "layout": "vertical",
+                "show": {
+                  "expr": "Or(Status == 'Playing', Status == 'Ended')"
+                },
+                "styles": {
+                  "width": "100%",
+                  "padding": "0"
+                }
+              },
+              "elements": [
+                {
+                  "id": "block_30",
+                  "name": "Numbers Block",
+                  "properties": {
+                    "layout": "horizontal",
+                    "styles": {
+                      "minHeight": "57",
+                      "border": "1px solid lightgray",
+                      "padding": "5",
+                      "minWidth": "280"
+                    }
+                  },
+                  "elements": [
+                    {
+                      "id": "itemset_1",
+                      "name": "Numbers Item Set",
+                      "properties": {
+                        "items": {
+                          "expr": "NumbersAvailable"
+                        },
+                        "canDragItem": {
+                          "expr": "RoundInPlay"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "text_52",
+                          "name": "Num Text",
+                          "properties": {
+                            "content": {
+                              "expr": "$item"
+                            },
+                            "styles": {
+                              "fontSize": "26",
+                              "width": "50",
+                              "border": "2px solid blue",
+                              "borderRadius": "10",
+                              "textAlign": "center",
+                              "height": "36"
+                            }
+                          },
+                          "kind": "Text"
+                        }
+                      ],
+                      "kind": "ItemSet"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "block_31",
+                  "name": "Operations Block",
+                  "properties": {
+                    "layout": "horizontal",
+                    "styles": {
+                      "minHeight": "57",
+                      "border": "1px solid lightgray",
+                      "padding": "5px",
+                      "minWidth": "210"
+                    }
+                  },
+                  "elements": [
+                    {
+                      "id": "itemset_2",
+                      "name": "Operations Item Set",
+                      "properties": {
+                        "items": {
+                          "expr": "OperationsAvailable"
+                        },
+                        "canDragItem": {
+                          "expr": "RoundInPlay"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "text_53",
+                          "name": "Op Text",
+                          "properties": {
+                            "content": {
+                              "expr": "$item"
+                            },
+                            "styles": {
+                              "fontSize": "26",
+                              "width": "50",
+                              "border": "2px solid green",
+                              "borderRadius": "10",
+                              "textAlign": "center",
+                              "height": "36"
+                            }
+                          },
+                          "kind": "Text"
+                        }
+                      ],
+                      "kind": "ItemSet"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "block_33",
+                  "name": "Row 1",
+                  "properties": {
+                    "layout": "horizontal",
+                    "styles": {
+                      "paddingLeft": "84"
+                    }
+                  },
+                  "elements": [
+                    {
+                      "id": "block_32",
+                      "name": "Num 1 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetNum(Num1, $droppedItem)"
+                        },
+                        "styles": {
+                          "minHeight": "70"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_3",
+                          "name": "Num 1 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Num1]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_54",
+                              "name": "Num 1 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid blue",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "block_36",
+                  "name": "Row 2",
+                  "properties": {
+                    "layout": "horizontal",
+                    "styles": {}
+                  },
+                  "elements": [
+                    {
+                      "id": "block_34",
+                      "name": "Op 1 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetOp(Op1, $droppedItem)"
+                        },
+                        "styles": {
+                          "height": "50",
+                          "minHeight": "65"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_4",
+                          "name": "Op 1 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Op1]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_55",
+                              "name": "Op 1 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid green",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    },
+                    {
+                      "id": "block_35",
+                      "name": "Num 2 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetNum(Num2, $droppedItem)"
+                        },
+                        "styles": {
+                          "minHeight": "70"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_5",
+                          "name": "Num 2 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Num2]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_56",
+                              "name": "Num 2 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid blue",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    },
+                    {
+                      "id": "text_57",
+                      "name": "Equals 1",
+                      "properties": {
+                        "content": "=",
+                        "styles": {
+                          "fontSize": "32",
+                          "paddingTop": "10"
+                        }
+                      },
+                      "kind": "Text"
+                    },
+                    {
+                      "id": "text_58",
+                      "name": "Result 1 Display",
+                      "properties": {
+                        "content": {
+                          "expr": "Result1"
+                        },
+                        "styles": {
+                          "fontSize": "32",
+                          "paddingTop": "10"
+                        }
+                      },
+                      "kind": "Text"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "block_39",
+                  "name": "Row 3",
+                  "properties": {
+                    "layout": "horizontal"
+                  },
+                  "elements": [
+                    {
+                      "id": "block_37",
+                      "name": "Op 2 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetOp(Op2, $droppedItem)"
+                        },
+                        "styles": {
+                          "height": "50",
+                          "minHeight": "65"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_6",
+                          "name": "Op 2 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Op2]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_59",
+                              "name": "Op 2 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid green",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    },
+                    {
+                      "id": "block_38",
+                      "name": "Num 3 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetNum(Num3, $droppedItem)"
+                        },
+                        "styles": {
+                          "minHeight": "70"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_7",
+                          "name": "Num 3 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Num3]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_60",
+                              "name": "Num 3 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid blue",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    },
+                    {
+                      "id": "text_61",
+                      "name": "Equals 2",
+                      "properties": {
+                        "content": "=",
+                        "styles": {
+                          "fontSize": "32",
+                          "paddingTop": "10"
+                        }
+                      },
+                      "kind": "Text"
+                    },
+                    {
+                      "id": "text_62",
+                      "name": "Result 2 Display",
+                      "properties": {
+                        "content": {
+                          "expr": "Result2"
+                        },
+                        "styles": {
+                          "fontSize": "32",
+                          "paddingTop": "10"
+                        }
+                      },
+                      "kind": "Text"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "block_42",
+                  "name": "Row 4",
+                  "properties": {
+                    "layout": "horizontal"
+                  },
+                  "elements": [
+                    {
+                      "id": "block_40",
+                      "name": "Op 3 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetOp(Op3, $droppedItem)"
+                        },
+                        "styles": {
+                          "height": "50",
+                          "minHeight": "65"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_8",
+                          "name": "Op 3 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Op3]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_63",
+                              "name": "Op 3 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid green",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    },
+                    {
+                      "id": "block_41",
+                      "name": "Num 4 Position",
+                      "properties": {
+                        "dropAction": {
+                          "expr": "ClearAndSetNum(Num4, $droppedItem)"
+                        },
+                        "styles": {
+                          "height": "50",
+                          "minHeight": "65"
+                        }
+                      },
+                      "elements": [
+                        {
+                          "id": "itemset_9",
+                          "name": "Num 4 Item Set",
+                          "properties": {
+                            "items": {
+                              "expr": "[Num4]"
+                            },
+                            "canDragItem": {
+                              "expr": "RoundInPlay"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "text_64",
+                              "name": "Num 4 Text",
+                              "properties": {
+                                "content": {
+                                  "expr": "$item"
+                                },
+                                "styles": {
+                                  "fontSize": "26",
+                                  "width": "50",
+                                  "border": "2px solid blue",
+                                  "borderRadius": "10",
+                                  "textAlign": "center",
+                                  "height": "36"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "ItemSet"
+                        }
+                      ],
+                      "kind": "Block"
+                    },
+                    {
+                      "id": "text_65",
+                      "name": "Equals 3",
+                      "properties": {
+                        "content": "=",
+                        "styles": {
+                          "fontSize": "32",
+                          "paddingTop": "10"
+                        }
+                      },
+                      "kind": "Text"
+                    },
+                    {
+                      "id": "text_66",
+                      "name": "Result 3 Display",
+                      "properties": {
+                        "content": {
+                          "expr": "Result3"
+                        },
+                        "styles": {
+                          "fontSize": "32",
+                          "paddingTop": "10"
+                        }
+                      },
+                      "kind": "Text"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "text_67",
+                  "name": "Target Text",
+                  "properties": {
+                    "content": {
+                      "expr": "'Your target is ' + (Target ?? null)"
+                    },
+                    "styles": {
+                      "fontSize": "24"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_68",
+                  "name": "Current points",
+                  "properties": {
+                    "content": {
+                      "expr": "'Getting there - this result will get you ' + Points() + ' points'"
+                    },
+                    "show": {
+                      "expr": "And(Not(IsRoundComplete), Points() > 0)"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_44",
+                  "name": "Round Exact",
+                  "properties": {
+                    "content": {
+                      "expr": "'Exactly right! ' + PointsScored + ' points added'"
+                    },
+                    "show": {
+                      "expr": "IsRoundExact"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_45",
+                  "name": "Round Failed",
+                  "properties": {
+                    "content": {
+                      "expr": "'Sorry - no points for this problem'"
+                    },
+                    "show": {
+                      "expr": "IsRoundFailed"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_46",
+                  "name": "Round Close",
+                  "properties": {
+                    "content": {
+                      "expr": "'Close - '  + PointsScored + ' points added'"
+                    },
+                    "show": {
+                      "expr": "And(IsRoundComplete, Not(RoundSkipped), Not(IsRoundExact), PointsScored > 0)"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "block_24",
+                  "name": "Ended Panel",
+                  "properties": {
+                    "show": {
+                      "expr": "Status == 'Ended'"
+                    }
+                  },
+                  "elements": [
+                    {
+                      "id": "text_47",
+                      "name": "Title",
+                      "properties": {
+                        "content": "Congratulations!",
+                        "styles": {
+                          "fontFamily": "\"Jersey 10\"",
+                          "fontSize": "36",
+                          "color": "#039a03"
+                        }
+                      },
+                      "kind": "Text"
+                    },
+                    {
+                      "id": "text_48",
+                      "name": "Score",
+                      "properties": {
+                        "content": {
+                          "expr": "'You have scored ' + Score + ' points!'"
+                        }
+                      },
+                      "kind": "Text"
+                    },
+                    {
+                      "id": "text_49",
+                      "name": "What next",
+                      "properties": {
+                        "content": "Click Start Game to have another go"
+                      },
+                      "kind": "Text"
+                    }
+                  ],
+                  "kind": "Block"
+                },
+                {
+                  "id": "block_25",
+                  "name": "Round Controls",
+                  "properties": {
+                    "layout": "horizontal"
+                  },
+                  "elements": [
+                    {
+                      "id": "button_4",
+                      "name": "New Round",
+                      "properties": {
+                        "action": {
+                          "expr": "StartNewRound()"
+                        },
+                        "show": {
+                          "expr": "Status == 'Playing' && IsRoundComplete"
+                        },
+                        "content": "Next Problem",
+                        "appearance": "filled"
+                      },
+                      "kind": "Button"
+                    },
+                    {
+                      "id": "button_5",
+                      "name": "Skip Round",
+                      "properties": {
+                        "action": {
+                          "expr": "Set(RoundSkipped, true)"
+                        },
+                        "show": {
+                          "expr": "Status == 'Playing' && Not(IsRoundComplete)"
+                        },
+                        "content": "Skip this problem"
+                      },
+                      "kind": "Button"
+                    }
+                  ],
+                  "kind": "Block"
+                }
+              ],
+              "kind": "Block"
+            },
+            {
+              "id": "block_27",
+              "name": "Pause Panel",
+              "properties": {
+                "show": {
+                  "expr": "Status == 'Paused'"
+                },
+                "styles": {
+                  "padding": "0"
+                }
+              },
+              "elements": [
+                {
+                  "id": "text_50",
+                  "name": "Title",
+                  "properties": {
+                    "content": "Paused...",
+                    "styles": {
+                      "color": "#7529df",
+                      "fontFamily": "\"Jersey 10\"",
+                      "fontSize": "28"
+                    }
+                  },
+                  "kind": "Text"
+                },
+                {
+                  "id": "text_51",
+                  "name": "Pause Text",
+                  "properties": {
+                    "content": "Click Continue Game to carry on",
+                    "styles": {
+                      "fontSize": "20"
+                    }
+                  },
+                  "kind": "Text"
+                }
+              ],
+              "kind": "Block"
+            },
+            {
+              "id": "block_28",
+              "name": "Spacer",
+              "properties": {
+                "styles": {
+                  "borderBottom": "2px solid lightgray",
+                  "width": "100%"
+                }
+              },
+              "kind": "Block"
+            },
+            {
+              "id": "block_29",
+              "name": "Game Controls",
+              "properties": {
+                "layout": "horizontal",
+                "styles": {
+                  "paddingTop": "20px"
+                }
+              },
+              "elements": [
+                {
+                  "id": "button_6",
+                  "name": "Start Game",
+                  "properties": {
+                    "action": {
+                      "expr": "StartNewGame()"
+                    },
+                    "show": {
+                      "expr": "Not(GameRunning)"
+                    },
+                    "appearance": "filled"
+                  },
+                  "kind": "Button"
+                },
+                {
+                  "id": "button_7",
+                  "name": "Stop Game",
+                  "properties": {
+                    "action": {
+                      "expr": "EndGame()"
+                    },
+                    "show": {
+                      "expr": "GameRunning"
+                    }
+                  },
+                  "kind": "Button"
+                },
+                {
+                  "id": "button_8",
+                  "name": "Pause Game",
+                  "properties": {
+                    "action": {
+                      "expr": "PauseGame()"
+                    },
+                    "show": {
+                      "expr": "Status == 'Playing'"
+                    }
+                  },
+                  "kind": "Button"
+                },
+                {
+                  "id": "button_9",
+                  "name": "Continue Game",
+                  "properties": {
+                    "action": {
+                      "expr": "ContinueGame()"
+                    },
+                    "show": {
+                      "expr": "Status == 'Paused'"
+                    }
+                  },
+                  "kind": "Button"
+                },
+                {
+                  "id": "button_10",
+                  "name": "Instructions",
+                  "properties": {
+                    "action": {
+                      "expr": "Instructions.Show()"
+                    }
+                  },
+                  "kind": "Button"
+                }
+              ],
+              "kind": "Block"
+            }
+          ],
+          "kind": "Page"
+        }
+      ],
+      "kind": "App"
+    },
+    {
+      "id": "_TOOLS",
+      "name": "Tools",
+      "properties": {},
+      "kind": "ToolFolder"
+    },
+    {
+      "id": "_COMPONENTS",
+      "name": "Components",
+      "properties": {},
+      "elements": [],
+      "kind": "ComponentFolder"
+    }
+  ],
+  "kind": "Project"
+}
