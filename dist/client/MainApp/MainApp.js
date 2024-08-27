@@ -14,7 +14,7 @@ const MainPage_NumbersItemSetItem = React.memo(function MainPage_NumbersItemSetI
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('NumText')).styles(elProps(pathTo('NumText.Styles')).fontSize('26').width('50').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('NumText')).styles(elProps(pathTo('NumText.Styles')).fontSize('26').border('2px solid blue').borderRadius('10').textAlign('center').height('36').width('1.5em').props).content($item).props),
     )
 })
 
@@ -30,7 +30,7 @@ const MainPage_OperationsItemSetItem = React.memo(function MainPage_OperationsIt
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('OpText')).styles(elProps(pathTo('OpText.Styles')).fontSize('26').width('50').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('OpText')).styles(elProps(pathTo('OpText.Styles')).fontSize('26').width('1.5em').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -197,7 +197,7 @@ function MainPage(props) {
         return If(Or(IsNull(a), IsNull(b)), null, () => If(op == '+', () => a + b, () => If(op == '-', () => a - b, () => If(op == 'x', () => a * b, null))))
     }), []))
     const SetupNewRound = _state.setObject(pathTo('SetupNewRound'), React.useCallback(wrapFn(pathTo('SetupNewRound'), 'calculation', () => {
-        let numbers = RandomListFrom(Range(5, 20), 4)
+        let numbers = RandomListFrom(Range(3, 12), 4)
         let ops = Shuffle(['+', '-', 'x'])
         let op1 = ops[0], op2 = ops[1], op3 = ops[2]
         let num1 = numbers[0], num2 = numbers[1], num3 = numbers[2], num4 = numbers[3]
@@ -279,10 +279,13 @@ function MainPage(props) {
     const StatsLayout = _state.setObject(pathTo('StatsLayout'), new Block.State(stateProps(pathTo('StatsLayout')).props))
     const ReadyPanel = _state.setObject(pathTo('ReadyPanel'), new Block.State(stateProps(pathTo('ReadyPanel')).props))
     const PlayPanel = _state.setObject(pathTo('PlayPanel'), new Block.State(stateProps(pathTo('PlayPanel')).props))
+    const PlayLayout = _state.setObject(pathTo('PlayLayout'), new Block.State(stateProps(pathTo('PlayLayout')).props))
+    const StorageLayout = _state.setObject(pathTo('StorageLayout'), new Block.State(stateProps(pathTo('StorageLayout')).props))
     const NumbersBlock = _state.setObject(pathTo('NumbersBlock'), new Block.State(stateProps(pathTo('NumbersBlock')).props))
     const NumbersItemSet = _state.setObject(pathTo('NumbersItemSet'), new ItemSet.State(stateProps(pathTo('NumbersItemSet')).items(NumbersAvailable).props))
     const OperationsBlock = _state.setObject(pathTo('OperationsBlock'), new Block.State(stateProps(pathTo('OperationsBlock')).props))
     const OperationsItemSet = _state.setObject(pathTo('OperationsItemSet'), new ItemSet.State(stateProps(pathTo('OperationsItemSet')).items(OperationsAvailable).props))
+    const CalculationLayout = _state.setObject(pathTo('CalculationLayout'), new Block.State(stateProps(pathTo('CalculationLayout')).props))
     const Row1 = _state.setObject(pathTo('Row1'), new Block.State(stateProps(pathTo('Row1')).props))
     const Num1Position = _state.setObject(pathTo('Num1Position'), new Block.State(stateProps(pathTo('Num1Position')).props))
     const Num1ItemSet = _state.setObject(pathTo('Num1ItemSet'), new ItemSet.State(stateProps(pathTo('Num1ItemSet')).items([Num1]).props))
@@ -391,18 +394,31 @@ function MainPage(props) {
         React.createElement(Calculation, elProps(pathTo('Result3')).show(false).styles(elProps(pathTo('Result3.Styles')).fontSize('24').props).props),
         React.createElement(Calculation, elProps(pathTo('Result')).show(false).props),
         React.createElement(Dialog, elProps(pathTo('Instructions')).layout('vertical').showCloseButton(true).styles(elProps(pathTo('Instructions.Styles')).padding('2em').props).props,
-            React.createElement(TextElement, elProps(pathTo('InstructionsText')).allowHtml(true).content(`You have to ...
+            React.createElement(TextElement, elProps(pathTo('InstructionsText')).allowHtml(true).content(`Ali has made some cards for his primary school arithmetic lesson - but they have all got mixed up.  Can you put them in the right order?
 
 
-Click Next Word after each word to get another one.
+Drag the numbers to the right hand column, and the arithmetic symbols to the left column, so that they make a sequence of steps that give the required answer.  You can move them around again if your first attempt doesn't work.
+
+
+You score ${PointsThreshold + Bonus} points for getting the correct answer, and unlike in the arithmetic class, you still get some points if you are close to the answer.
+
+
+Click Skip This Problem to move on if you decide it's too hard.
+
+
+When you finish a problem, click Next Problem to get another one.
+
+
+You have 3 minutes to do as many as you can.
 
 
 <b>Tips</b>
 <ul>
-  <li>Some of your results could be negative numbers</li>
-</ul>
-
-You have 3 minutes to do as much as you can.`).props),
+  <li>These puzzles may look simple, but they are actually surprisingly hard!</li>
+  <li>If you get stuck, try to get as close as you can and then skip to another problem.</li>
+<li>Some of your results could be negative numbers</li>
+</ul> 
+`).props),
             React.createElement(Button, elProps(pathTo('StartGame2')).content('Start Game').appearance('filled').show(Not(GameRunning)).action(StartGame2_action).props),
     ),
         React.createElement(Block, elProps(pathTo('StatsLayout')).layout('horizontal wrapped').styles(elProps(pathTo('StatsLayout.Styles')).fontSize('24').props).props,
@@ -412,53 +428,59 @@ You have 3 minutes to do as much as you can.`).props),
     ),
         React.createElement(Block, elProps(pathTo('ReadyPanel')).layout('vertical').show(Status == 'Ready').styles(elProps(pathTo('ReadyPanel.Styles')).padding('0').props).props,
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).color('blue').fontFamily('"Jersey 10"').fontSize('36').props).content('Welcome!').props),
-            React.createElement(TextElement, elProps(pathTo('ReadyText')).styles(elProps(pathTo('ReadyText.Styles')).fontSize('20').props).content(`Do what you need to do
+            React.createElement(TextElement, elProps(pathTo('ReadyText')).styles(elProps(pathTo('ReadyText.Styles')).fontSize('20').props).content(`Sort out jumbled arithmetic problems to give the right answer.
 
 Click Instructions for full details
 
 Or Start Game to dive straight in!`).props),
     ),
         React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').props).props,
-            React.createElement(Block, elProps(pathTo('NumbersBlock')).layout('horizontal').styles(elProps(pathTo('NumbersBlock.Styles')).minHeight('52').border('1px solid lightgray').padding('5').minWidth('280').props).props,
+            React.createElement(Block, elProps(pathTo('PlayLayout')).layout('horizontal').props,
+            React.createElement(Block, elProps(pathTo('StorageLayout')).layout('vertical').styles(elProps(pathTo('StorageLayout.Styles')).backgroundColor('lightblue').props).props,
+            React.createElement(Block, elProps(pathTo('NumbersBlock')).layout('horizontal wrapped').styles(elProps(pathTo('NumbersBlock.Styles')).border('0px solid lightgray').padding('5').width('120').height('120').marginBottom('10').props).props,
             React.createElement(ItemSet, elProps(pathTo('NumbersItemSet')).itemContentComponent(MainPage_NumbersItemSetItem).props),
     ),
-            React.createElement(Block, elProps(pathTo('OperationsBlock')).layout('horizontal').styles(elProps(pathTo('OperationsBlock.Styles')).minHeight('52').border('1px solid lightgray').padding('5px').minWidth('210').props).props,
+            React.createElement(Block, elProps(pathTo('OperationsBlock')).layout('horizontal wrapped').styles(elProps(pathTo('OperationsBlock.Styles')).border('0px solid lightgray').padding('5px').width('120').height('120').props).props,
             React.createElement(ItemSet, elProps(pathTo('OperationsItemSet')).itemContentComponent(MainPage_OperationsItemSetItem).props),
     ),
-            React.createElement(Block, elProps(pathTo('Row1')).layout('horizontal').styles(elProps(pathTo('Row1.Styles')).paddingLeft('90').marginBottom('20').props).props,
+    ),
+            React.createElement(Block, elProps(pathTo('CalculationLayout')).layout('vertical').props,
+            React.createElement(Block, elProps(pathTo('Row1')).layout('horizontal').styles(elProps(pathTo('Row1.Styles')).paddingLeft('70').marginBottom('20').props).props,
             React.createElement(Block, elProps(pathTo('Num1Position')).layout('none').dropAction(Num1Position_dropAction).styles(elProps(pathTo('Num1Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Num1ItemSet')).itemContentComponent(MainPage_Num1ItemSetItem).props),
     ),
     ),
             React.createElement(Block, elProps(pathTo('Row2')).layout('horizontal').styles(elProps(pathTo('Row2.Styles')).marginBottom('20').props).props,
-            React.createElement(Block, elProps(pathTo('Op1Position')).layout('none').dropAction(Op1Position_dropAction).styles(elProps(pathTo('Op1Position.Styles')).paddingLeft('10').props).props,
+            React.createElement(Block, elProps(pathTo('Op1Position')).layout('none').dropAction(Op1Position_dropAction).styles(elProps(pathTo('Op1Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Op1ItemSet')).itemContentComponent(MainPage_Op1ItemSetItem).props),
     ),
-            React.createElement(Block, elProps(pathTo('Num2Position')).layout('none').dropAction(Num2Position_dropAction).styles(elProps(pathTo('Num2Position.Styles')).paddingLeft('10').props).props,
+            React.createElement(Block, elProps(pathTo('Num2Position')).layout('none').dropAction(Num2Position_dropAction).styles(elProps(pathTo('Num2Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Num2ItemSet')).itemContentComponent(MainPage_Num2ItemSetItem).props),
     ),
             React.createElement(TextElement, elProps(pathTo('Equals1')).styles(elProps(pathTo('Equals1.Styles')).fontSize('26').props).content('=').props),
             React.createElement(TextElement, elProps(pathTo('Result1Display')).styles(elProps(pathTo('Result1Display.Styles')).fontSize('26').props).content(Result1).props),
     ),
             React.createElement(Block, elProps(pathTo('Row3')).layout('horizontal').styles(elProps(pathTo('Row3.Styles')).marginBottom('20').props).props,
-            React.createElement(Block, elProps(pathTo('Op2Position')).layout('none').dropAction(Op2Position_dropAction).styles(elProps(pathTo('Op2Position.Styles')).paddingLeft('10').props).props,
+            React.createElement(Block, elProps(pathTo('Op2Position')).layout('none').dropAction(Op2Position_dropAction).styles(elProps(pathTo('Op2Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Op2ItemSet')).itemContentComponent(MainPage_Op2ItemSetItem).props),
     ),
-            React.createElement(Block, elProps(pathTo('Num3Position')).layout('none').dropAction(Num3Position_dropAction).styles(elProps(pathTo('Num3Position.Styles')).paddingLeft('10').props).props,
+            React.createElement(Block, elProps(pathTo('Num3Position')).layout('none').dropAction(Num3Position_dropAction).styles(elProps(pathTo('Num3Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Num3ItemSet')).itemContentComponent(MainPage_Num3ItemSetItem).props),
     ),
             React.createElement(TextElement, elProps(pathTo('Equals2')).styles(elProps(pathTo('Equals2.Styles')).fontSize('26').props).content('=').props),
             React.createElement(TextElement, elProps(pathTo('Result2Display')).styles(elProps(pathTo('Result2Display.Styles')).fontSize('26').props).content(Result2).props),
     ),
             React.createElement(Block, elProps(pathTo('Row4')).layout('horizontal').props,
-            React.createElement(Block, elProps(pathTo('Op3Position')).layout('none').dropAction(Op3Position_dropAction).styles(elProps(pathTo('Op3Position.Styles')).paddingLeft('10').props).props,
+            React.createElement(Block, elProps(pathTo('Op3Position')).layout('none').dropAction(Op3Position_dropAction).styles(elProps(pathTo('Op3Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Op3ItemSet')).itemContentComponent(MainPage_Op3ItemSetItem).props),
     ),
-            React.createElement(Block, elProps(pathTo('Num4Position')).layout('none').dropAction(Num4Position_dropAction).styles(elProps(pathTo('Num4Position.Styles')).paddingLeft('10').props).props,
+            React.createElement(Block, elProps(pathTo('Num4Position')).layout('none').dropAction(Num4Position_dropAction).styles(elProps(pathTo('Num4Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Num4ItemSet')).itemContentComponent(MainPage_Num4ItemSetItem).props),
     ),
             React.createElement(TextElement, elProps(pathTo('Equals3')).styles(elProps(pathTo('Equals3.Styles')).fontSize('26').props).content('=').props),
             React.createElement(TextElement, elProps(pathTo('Result3Display')).styles(elProps(pathTo('Result3Display.Styles')).fontSize('26').props).content(Result3).props),
+    ),
+    ),
     ),
             React.createElement(TextElement, elProps(pathTo('TargetText')).styles(elProps(pathTo('TargetText.Styles')).fontSize('24').props).content('Your target is ' + (Target ?? null)).props),
             React.createElement(TextElement, elProps(pathTo('Currentpoints')).show(And(Not(IsRoundComplete), Points() > 0)).content('Getting there - this result will get you ' + Points() + ' points').props),

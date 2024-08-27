@@ -191,7 +191,7 @@
               "properties": {
                 "action": true,
                 "calculation": {
-                  "expr": "let numbers = RandomListFrom(Range(5, 20), 4)\nlet ops = Shuffle(['+', '-', 'x'])\nlet op1 = ops[0], op2 = ops[1], op3 = ops[2]\nlet num1 = numbers[0], num2 = numbers[1], num3 = numbers[2], num4 = numbers[3]\nlet result1 = Calc(num1, op1, num2)\nlet result2 = Calc(result1, op2, num3)\nlet result3 = Calc(result2, op3, num4)\nSet(CorrectNumbers, numbers)\nSet(CorrectOperations, ops)\nSet(Operations, Shuffle(ops))\nSet(Numbers, Shuffle(numbers))\nSet(Target, result3)\nReset(Num1, Num2, Num3, Num4)\nReset(Op1, Op2, Op3)\nReset(PointsScored, ResultExact)"
+                  "expr": "let numbers = RandomListFrom(Range(3, 12), 4)\nlet ops = Shuffle(['+', '-', 'x'])\nlet op1 = ops[0], op2 = ops[1], op3 = ops[2]\nlet num1 = numbers[0], num2 = numbers[1], num3 = numbers[2], num4 = numbers[3]\nlet result1 = Calc(num1, op1, num2)\nlet result2 = Calc(result1, op2, num3)\nlet result3 = Calc(result2, op3, num4)\nSet(CorrectNumbers, numbers)\nSet(CorrectOperations, ops)\nSet(Operations, Shuffle(ops))\nSet(Numbers, Shuffle(numbers))\nSet(Target, result3)\nReset(Num1, Num2, Num3, Num4)\nReset(Op1, Op2, Op3)\nReset(PointsScored, ResultExact)"
                 }
               },
               "kind": "Function"
@@ -543,7 +543,9 @@
                   "id": "text_38",
                   "name": "Instructions Text",
                   "properties": {
-                    "content": "You have to ...\n\n\nClick Next Word after each word to get another one.\n\n\n<b>Tips</b>\n<ul>\n  <li>Some of your results could be negative numbers</li>\n</ul>\n\nYou have 3 minutes to do as much as you can.",
+                    "content": {
+                      "expr": "`Ali has made some cards for his primary school arithmetic lesson - but they have all got mixed up.  Can you put them in the right order?\n\n\nDrag the numbers to the right hand column, and the arithmetic symbols to the left column, so that they make a sequence of steps that give the required answer.  You can move them around again if your first attempt doesn't work.\n\n\nYou score ${PointsThreshold + Bonus} points for getting the correct answer, and unlike in the arithmetic class, you still get some points if you are close to the answer.\n\n\nClick Skip This Problem to move on if you decide it's too hard.\n\n\nWhen you finish a problem, click Next Problem to get another one.\n\n\nYou have 3 minutes to do as many as you can.\n\n\n<b>Tips</b>\n<ul>\n  <li>These puzzles may look simple, but they are actually surprisingly hard!</li>\n  <li>If you get stuck, try to get as close as you can and then skip to another problem.</li>\n<li>Some of your results could be negative numbers</li>\n</ul> \n`\n\n"
+                    },
                     "allowHtml": true
                   },
                   "kind": "Text"
@@ -661,7 +663,7 @@
                   "id": "text_43",
                   "name": "Ready Text",
                   "properties": {
-                    "content": "Do what you need to do\n\nClick Instructions for full details\n\nOr Start Game to dive straight in!",
+                    "content": "Sort out jumbled arithmetic problems to give the right answer.\n\nClick Instructions for full details\n\nOr Start Game to dive straight in!",
                     "styles": {
                       "fontSize": "20"
                     }
@@ -686,562 +688,584 @@
               },
               "elements": [
                 {
-                  "id": "block_30",
-                  "name": "Numbers Block",
-                  "properties": {
-                    "layout": "horizontal",
-                    "styles": {
-                      "minHeight": "52",
-                      "border": "1px solid lightgray",
-                      "padding": "5",
-                      "minWidth": "280"
-                    }
-                  },
-                  "elements": [
-                    {
-                      "id": "itemset_1",
-                      "name": "Numbers Item Set",
-                      "properties": {
-                        "items": {
-                          "expr": "NumbersAvailable"
-                        },
-                        "canDragItem": {
-                          "expr": "RoundInPlay"
-                        }
-                      },
-                      "elements": [
-                        {
-                          "id": "text_52",
-                          "name": "Num Text",
-                          "properties": {
-                            "content": {
-                              "expr": "$item"
-                            },
-                            "styles": {
-                              "fontSize": "26",
-                              "width": "50",
-                              "border": "2px solid blue",
-                              "borderRadius": "10",
-                              "textAlign": "center",
-                              "height": "36"
-                            }
-                          },
-                          "kind": "Text"
-                        }
-                      ],
-                      "kind": "ItemSet"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "block_31",
-                  "name": "Operations Block",
-                  "properties": {
-                    "layout": "horizontal",
-                    "styles": {
-                      "minHeight": "52",
-                      "border": "1px solid lightgray",
-                      "padding": "5px",
-                      "minWidth": "210"
-                    }
-                  },
-                  "elements": [
-                    {
-                      "id": "itemset_2",
-                      "name": "Operations Item Set",
-                      "properties": {
-                        "items": {
-                          "expr": "OperationsAvailable"
-                        },
-                        "canDragItem": {
-                          "expr": "RoundInPlay"
-                        }
-                      },
-                      "elements": [
-                        {
-                          "id": "text_53",
-                          "name": "Op Text",
-                          "properties": {
-                            "content": {
-                              "expr": "$item"
-                            },
-                            "styles": {
-                              "fontSize": "26",
-                              "width": "50",
-                              "border": "2px solid green",
-                              "borderRadius": "10",
-                              "textAlign": "center",
-                              "height": "36"
-                            }
-                          },
-                          "kind": "Text"
-                        }
-                      ],
-                      "kind": "ItemSet"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "block_33",
-                  "name": "Row 1",
-                  "properties": {
-                    "layout": "horizontal",
-                    "styles": {
-                      "paddingLeft": "90",
-                      "marginBottom": "20"
-                    }
-                  },
-                  "elements": [
-                    {
-                      "id": "block_32",
-                      "name": "Num 1 Position",
-                      "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetNum(Num1, $droppedItem)"
-                        },
-                        "styles": {},
-                        "layout": "none"
-                      },
-                      "elements": [
-                        {
-                          "id": "itemset_3",
-                          "name": "Num 1 Item Set",
-                          "properties": {
-                            "items": {
-                              "expr": "[Num1]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
-                            }
-                          },
-                          "elements": [
-                            {
-                              "id": "text_54",
-                              "name": "Num 1 Text",
-                              "properties": {
-                                "content": {
-                                  "expr": "$item"
-                                },
-                                "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid blue",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
-                                }
-                              },
-                              "kind": "Text"
-                            }
-                          ],
-                          "kind": "ItemSet"
-                        }
-                      ],
-                      "kind": "Block"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "block_36",
-                  "name": "Row 2",
-                  "properties": {
-                    "layout": "horizontal",
-                    "styles": {
-                      "marginBottom": "20"
-                    }
-                  },
-                  "elements": [
-                    {
-                      "id": "block_34",
-                      "name": "Op 1 Position",
-                      "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetOp(Op1, $droppedItem)"
-                        },
-                        "styles": {
-                          "paddingLeft": "10"
-                        },
-                        "layout": "none"
-                      },
-                      "elements": [
-                        {
-                          "id": "itemset_4",
-                          "name": "Op 1 Item Set",
-                          "properties": {
-                            "items": {
-                              "expr": "[Op1]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
-                            }
-                          },
-                          "elements": [
-                            {
-                              "id": "text_55",
-                              "name": "Op 1 Text",
-                              "properties": {
-                                "content": {
-                                  "expr": "$item"
-                                },
-                                "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid green",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
-                                }
-                              },
-                              "kind": "Text"
-                            }
-                          ],
-                          "kind": "ItemSet"
-                        }
-                      ],
-                      "kind": "Block"
-                    },
-                    {
-                      "id": "block_35",
-                      "name": "Num 2 Position",
-                      "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetNum(Num2, $droppedItem)"
-                        },
-                        "styles": {
-                          "paddingLeft": "10"
-                        },
-                        "layout": "none"
-                      },
-                      "elements": [
-                        {
-                          "id": "itemset_5",
-                          "name": "Num 2 Item Set",
-                          "properties": {
-                            "items": {
-                              "expr": "[Num2]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
-                            }
-                          },
-                          "elements": [
-                            {
-                              "id": "text_56",
-                              "name": "Num 2 Text",
-                              "properties": {
-                                "content": {
-                                  "expr": "$item"
-                                },
-                                "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid blue",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
-                                }
-                              },
-                              "kind": "Text"
-                            }
-                          ],
-                          "kind": "ItemSet"
-                        }
-                      ],
-                      "kind": "Block"
-                    },
-                    {
-                      "id": "text_57",
-                      "name": "Equals 1",
-                      "properties": {
-                        "content": "=",
-                        "styles": {
-                          "fontSize": "26"
-                        }
-                      },
-                      "kind": "Text"
-                    },
-                    {
-                      "id": "text_58",
-                      "name": "Result 1 Display",
-                      "properties": {
-                        "content": {
-                          "expr": "Result1"
-                        },
-                        "styles": {
-                          "fontSize": "26"
-                        }
-                      },
-                      "kind": "Text"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "block_39",
-                  "name": "Row 3",
-                  "properties": {
-                    "layout": "horizontal",
-                    "styles": {
-                      "marginBottom": "20"
-                    }
-                  },
-                  "elements": [
-                    {
-                      "id": "block_37",
-                      "name": "Op 2 Position",
-                      "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetOp(Op2, $droppedItem)"
-                        },
-                        "styles": {
-                          "paddingLeft": "10"
-                        },
-                        "layout": "none"
-                      },
-                      "elements": [
-                        {
-                          "id": "itemset_6",
-                          "name": "Op 2 Item Set",
-                          "properties": {
-                            "items": {
-                              "expr": "[Op2]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
-                            }
-                          },
-                          "elements": [
-                            {
-                              "id": "text_59",
-                              "name": "Op 2 Text",
-                              "properties": {
-                                "content": {
-                                  "expr": "$item"
-                                },
-                                "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid green",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
-                                }
-                              },
-                              "kind": "Text"
-                            }
-                          ],
-                          "kind": "ItemSet"
-                        }
-                      ],
-                      "kind": "Block"
-                    },
-                    {
-                      "id": "block_38",
-                      "name": "Num 3 Position",
-                      "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetNum(Num3, $droppedItem)"
-                        },
-                        "styles": {
-                          "paddingLeft": "10"
-                        },
-                        "layout": "none"
-                      },
-                      "elements": [
-                        {
-                          "id": "itemset_7",
-                          "name": "Num 3 Item Set",
-                          "properties": {
-                            "items": {
-                              "expr": "[Num3]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
-                            }
-                          },
-                          "elements": [
-                            {
-                              "id": "text_60",
-                              "name": "Num 3 Text",
-                              "properties": {
-                                "content": {
-                                  "expr": "$item"
-                                },
-                                "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid blue",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
-                                }
-                              },
-                              "kind": "Text"
-                            }
-                          ],
-                          "kind": "ItemSet"
-                        }
-                      ],
-                      "kind": "Block"
-                    },
-                    {
-                      "id": "text_69",
-                      "name": "Equals 2",
-                      "properties": {
-                        "content": "=",
-                        "styles": {
-                          "fontSize": "26"
-                        }
-                      },
-                      "kind": "Text"
-                    },
-                    {
-                      "id": "text_70",
-                      "name": "Result 2 Display",
-                      "properties": {
-                        "content": {
-                          "expr": "Result2"
-                        },
-                        "styles": {
-                          "fontSize": "26"
-                        }
-                      },
-                      "kind": "Text"
-                    }
-                  ],
-                  "kind": "Block"
-                },
-                {
-                  "id": "block_42",
-                  "name": "Row 4",
+                  "id": "block_58",
+                  "name": "Play Layout",
                   "properties": {
                     "layout": "horizontal"
                   },
                   "elements": [
                     {
-                      "id": "block_40",
-                      "name": "Op 3 Position",
+                      "id": "block_61",
+                      "name": "Storage Layout",
                       "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetOp(Op3, $droppedItem)"
-                        },
+                        "layout": "vertical",
                         "styles": {
-                          "paddingLeft": "10"
-                        },
-                        "layout": "none"
+                          "backgroundColor": "lightblue"
+                        }
                       },
                       "elements": [
                         {
-                          "id": "itemset_8",
-                          "name": "Op 3 Item Set",
+                          "id": "block_59",
+                          "name": "Numbers Block",
                           "properties": {
-                            "items": {
-                              "expr": "[Op3]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
+                            "layout": "horizontal wrapped",
+                            "styles": {
+                              "border": "0px solid lightgray",
+                              "padding": "5",
+                              "width": "120",
+                              "height": "120",
+                              "marginBottom": "10"
                             }
                           },
                           "elements": [
                             {
-                              "id": "text_63",
-                              "name": "Op 3 Text",
+                              "id": "itemset_1",
+                              "name": "Numbers Item Set",
                               "properties": {
-                                "content": {
-                                  "expr": "$item"
+                                "items": {
+                                  "expr": "NumbersAvailable"
                                 },
-                                "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid green",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
+                                "canDragItem": {
+                                  "expr": "RoundInPlay"
                                 }
                               },
-                              "kind": "Text"
+                              "elements": [
+                                {
+                                  "id": "text_69",
+                                  "name": "Num Text",
+                                  "properties": {
+                                    "content": {
+                                      "expr": "$item"
+                                    },
+                                    "styles": {
+                                      "fontSize": "26",
+                                      "border": "2px solid blue",
+                                      "borderRadius": "10",
+                                      "textAlign": "center",
+                                      "height": "36",
+                                      "width": "1.5em"
+                                    }
+                                  },
+                                  "kind": "Text"
+                                }
+                              ],
+                              "kind": "ItemSet"
                             }
                           ],
-                          "kind": "ItemSet"
+                          "kind": "Block"
+                        },
+                        {
+                          "id": "block_60",
+                          "name": "Operations Block",
+                          "properties": {
+                            "layout": "horizontal wrapped",
+                            "styles": {
+                              "border": "0px solid lightgray",
+                              "padding": "5px",
+                              "width": "120",
+                              "height": "120"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "itemset_2",
+                              "name": "Operations Item Set",
+                              "properties": {
+                                "items": {
+                                  "expr": "OperationsAvailable"
+                                },
+                                "canDragItem": {
+                                  "expr": "RoundInPlay"
+                                }
+                              },
+                              "elements": [
+                                {
+                                  "id": "text_70",
+                                  "name": "Op Text",
+                                  "properties": {
+                                    "content": {
+                                      "expr": "$item"
+                                    },
+                                    "styles": {
+                                      "fontSize": "26",
+                                      "width": "1.5em",
+                                      "border": "2px solid green",
+                                      "borderRadius": "10",
+                                      "textAlign": "center",
+                                      "height": "36"
+                                    }
+                                  },
+                                  "kind": "Text"
+                                }
+                              ],
+                              "kind": "ItemSet"
+                            }
+                          ],
+                          "kind": "Block"
                         }
                       ],
                       "kind": "Block"
                     },
                     {
-                      "id": "block_41",
-                      "name": "Num 4 Position",
+                      "id": "block_73",
+                      "name": "Calculation Layout",
                       "properties": {
-                        "dropAction": {
-                          "expr": "ClearAndSetNum(Num4, $droppedItem)"
-                        },
-                        "styles": {
-                          "paddingLeft": "10"
-                        },
-                        "layout": "none"
+                        "layout": "vertical"
                       },
                       "elements": [
                         {
-                          "id": "itemset_9",
-                          "name": "Num 4 Item Set",
+                          "id": "block_63",
+                          "name": "Row 1",
                           "properties": {
-                            "items": {
-                              "expr": "[Num4]"
-                            },
-                            "canDragItem": {
-                              "expr": "RoundInPlay"
+                            "layout": "horizontal",
+                            "styles": {
+                              "paddingLeft": "70",
+                              "marginBottom": "20"
                             }
                           },
                           "elements": [
                             {
-                              "id": "text_64",
-                              "name": "Num 4 Text",
+                              "id": "block_62",
+                              "name": "Num 1 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetNum(Num1, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_3",
+                                  "name": "Num 1 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Num1]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_71",
+                                      "name": "Num 1 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid blue",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            }
+                          ],
+                          "kind": "Block"
+                        },
+                        {
+                          "id": "block_66",
+                          "name": "Row 2",
+                          "properties": {
+                            "layout": "horizontal",
+                            "styles": {
+                              "marginBottom": "20"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "block_64",
+                              "name": "Op 1 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetOp(Op1, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_4",
+                                  "name": "Op 1 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Op1]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_72",
+                                      "name": "Op 1 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid green",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_65",
+                              "name": "Num 2 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetNum(Num2, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_5",
+                                  "name": "Num 2 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Num2]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_73",
+                                      "name": "Num 2 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid blue",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "text_74",
+                              "name": "Equals 1",
+                              "properties": {
+                                "content": "=",
+                                "styles": {
+                                  "fontSize": "26"
+                                }
+                              },
+                              "kind": "Text"
+                            },
+                            {
+                              "id": "text_75",
+                              "name": "Result 1 Display",
                               "properties": {
                                 "content": {
-                                  "expr": "$item"
+                                  "expr": "Result1"
                                 },
                                 "styles": {
-                                  "fontSize": "26",
-                                  "width": "50",
-                                  "border": "2px solid blue",
-                                  "borderRadius": "10",
-                                  "textAlign": "center",
-                                  "height": "36"
+                                  "fontSize": "26"
                                 }
                               },
                               "kind": "Text"
                             }
                           ],
-                          "kind": "ItemSet"
+                          "kind": "Block"
+                        },
+                        {
+                          "id": "block_69",
+                          "name": "Row 3",
+                          "properties": {
+                            "layout": "horizontal",
+                            "styles": {
+                              "marginBottom": "20"
+                            }
+                          },
+                          "elements": [
+                            {
+                              "id": "block_67",
+                              "name": "Op 2 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetOp(Op2, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_6",
+                                  "name": "Op 2 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Op2]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_76",
+                                      "name": "Op 2 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid green",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_68",
+                              "name": "Num 3 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetNum(Num3, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_7",
+                                  "name": "Num 3 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Num3]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_77",
+                                      "name": "Num 3 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid blue",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "text_78",
+                              "name": "Equals 2",
+                              "properties": {
+                                "content": "=",
+                                "styles": {
+                                  "fontSize": "26"
+                                }
+                              },
+                              "kind": "Text"
+                            },
+                            {
+                              "id": "text_79",
+                              "name": "Result 2 Display",
+                              "properties": {
+                                "content": {
+                                  "expr": "Result2"
+                                },
+                                "styles": {
+                                  "fontSize": "26"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "Block"
+                        },
+                        {
+                          "id": "block_72",
+                          "name": "Row 4",
+                          "properties": {
+                            "layout": "horizontal"
+                          },
+                          "elements": [
+                            {
+                              "id": "block_70",
+                              "name": "Op 3 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetOp(Op3, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_8",
+                                  "name": "Op 3 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Op3]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_80",
+                                      "name": "Op 3 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid green",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "block_71",
+                              "name": "Num 4 Position",
+                              "properties": {
+                                "dropAction": {
+                                  "expr": "ClearAndSetNum(Num4, $droppedItem)"
+                                },
+                                "styles": {},
+                                "layout": "none"
+                              },
+                              "elements": [
+                                {
+                                  "id": "itemset_9",
+                                  "name": "Num 4 Item Set",
+                                  "properties": {
+                                    "items": {
+                                      "expr": "[Num4]"
+                                    },
+                                    "canDragItem": {
+                                      "expr": "RoundInPlay"
+                                    }
+                                  },
+                                  "elements": [
+                                    {
+                                      "id": "text_81",
+                                      "name": "Num 4 Text",
+                                      "properties": {
+                                        "content": {
+                                          "expr": "$item"
+                                        },
+                                        "styles": {
+                                          "fontSize": "26",
+                                          "width": "50",
+                                          "border": "2px solid blue",
+                                          "borderRadius": "10",
+                                          "textAlign": "center",
+                                          "height": "36"
+                                        }
+                                      },
+                                      "kind": "Text"
+                                    }
+                                  ],
+                                  "kind": "ItemSet"
+                                }
+                              ],
+                              "kind": "Block"
+                            },
+                            {
+                              "id": "text_82",
+                              "name": "Equals 3",
+                              "properties": {
+                                "content": "=",
+                                "styles": {
+                                  "fontSize": "26"
+                                }
+                              },
+                              "kind": "Text"
+                            },
+                            {
+                              "id": "text_83",
+                              "name": "Result 3 Display",
+                              "properties": {
+                                "content": {
+                                  "expr": "Result3"
+                                },
+                                "styles": {
+                                  "fontSize": "26"
+                                }
+                              },
+                              "kind": "Text"
+                            }
+                          ],
+                          "kind": "Block"
                         }
                       ],
                       "kind": "Block"
-                    },
-                    {
-                      "id": "text_65",
-                      "name": "Equals 3",
-                      "properties": {
-                        "content": "=",
-                        "styles": {
-                          "fontSize": "26"
-                        }
-                      },
-                      "kind": "Text"
-                    },
-                    {
-                      "id": "text_66",
-                      "name": "Result 3 Display",
-                      "properties": {
-                        "content": {
-                          "expr": "Result3"
-                        },
-                        "styles": {
-                          "fontSize": "26"
-                        }
-                      },
-                      "kind": "Text"
                     }
                   ],
                   "kind": "Block"
