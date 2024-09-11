@@ -394,13 +394,10 @@ function MainPage(props) {
         React.createElement(Calculation, elProps(pathTo('Result3')).show(false).styles(elProps(pathTo('Result3.Styles')).fontSize('24').props).props),
         React.createElement(Calculation, elProps(pathTo('Result')).show(false).props),
         React.createElement(Dialog, elProps(pathTo('Instructions')).layout('vertical').showCloseButton(true).styles(elProps(pathTo('Instructions.Styles')).padding('2em').props).props,
-            React.createElement(TextElement, elProps(pathTo('InstructionsText')).allowHtml(true).content(`Ali has made some cards for his primary school arithmetic lesson - but they have all got mixed up.  Can you put them in the right order?
+            React.createElement(TextElement, elProps(pathTo('InstructionsText')).allowHtml(true).content(`Drag the numbers to the right hand column, and the arithmetic symbols to the left column, so that they make a sequence of steps that give the required answer.  You can move them around again if your first attempt doesn't work.
 
 
-Drag the numbers to the right hand column, and the arithmetic symbols to the left column, so that they make a sequence of steps that give the required answer.  You can move them around again if your first attempt doesn't work.
-
-
-You score ${PointsThreshold + Bonus} points for getting the correct answer, and unlike in the arithmetic class, you still get some points if you are close to the answer.
+You score ${PointsThreshold + Bonus} points for getting the correct answer, and you still get some points if you are close.
 
 
 Click Skip This Problem to move on if you decide it's too hard.
@@ -414,9 +411,9 @@ You have 3 minutes to do as many as you can.
 
 <b>Tips</b>
 <ul>
-  <li>These puzzles may look simple, but they are actually surprisingly hard!</li>
+  <li>Some of your results could be negative numbers</li>
   <li>If you get stuck, try to get as close as you can and then skip to another problem.</li>
-<li>Some of your results could be negative numbers</li>
+  <li>These puzzles are harder than they look!</li>
 </ul> 
 `).props),
             React.createElement(Button, elProps(pathTo('StartGame2')).content('Start Game').appearance('filled').show(Not(GameRunning)).action(StartGame2_action).props),
