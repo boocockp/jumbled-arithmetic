@@ -7,7 +7,8 @@
       "id": "app_1",
       "name": "Main App",
       "properties": {
-        "fonts": "Jersey 10"
+        "fonts": "Jersey 10",
+        "maxWidth": 500
       },
       "elements": [
         {
@@ -15,7 +16,8 @@
           "name": "Main Page",
           "properties": {
             "styles": {
-              "paddingTop": "0"
+              "paddingTop": "0",
+              "gap": "4px"
             }
           },
           "elements": [
@@ -235,7 +237,7 @@
               "properties": {
                 "action": true,
                 "calculation": {
-                  "expr": "Set(Status, 'Ended')"
+                  "expr": "Set(Status, 'Ended')\nSendScore(Score)"
                 }
               },
               "kind": "Function"
@@ -258,6 +260,18 @@
                 "action": true,
                 "calculation": {
                   "expr": "Set(Status, 'Playing')\nGameTimer.Start()"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_17",
+              "name": "Send Score",
+              "properties": {
+                "input1": "score",
+                "action": true,
+                "calculation": {
+                  "expr": "SendMessage('parent', Record('score', Score, 'url', CurrentUrl().text))"
                 }
               },
               "kind": "Function"
@@ -683,7 +697,8 @@
                 },
                 "styles": {
                   "width": "100%",
-                  "padding": "0"
+                  "padding": "0",
+                  "position": "relative"
                 }
               },
               "elements": [
@@ -700,7 +715,8 @@
                       "properties": {
                         "layout": "vertical",
                         "styles": {
-                          "backgroundColor": "lightblue"
+                          "backgroundColor": "lightblue",
+                          "height": "100%"
                         }
                       },
                       "elements": [
@@ -713,8 +729,8 @@
                               "border": "0px solid lightgray",
                               "padding": "5",
                               "width": "120",
-                              "height": "120",
-                              "marginBottom": "10"
+                              "height": "100",
+                              "gridRowGap": "3"
                             }
                           },
                           "elements": [
@@ -763,7 +779,8 @@
                               "border": "0px solid lightgray",
                               "padding": "5px",
                               "width": "120",
-                              "height": "120"
+                              "height": "100",
+                              "gridRowGap": "3"
                             }
                           },
                           "elements": [
@@ -810,7 +827,12 @@
                       "id": "block_73",
                       "name": "Calculation Layout",
                       "properties": {
-                        "layout": "vertical"
+                        "layout": "vertical",
+                        "styles": {
+                          "paddingLeft": "2px",
+                          "gap": "12px",
+                          "paddingBottom": "0px !important"
+                        }
                       },
                       "elements": [
                         {
@@ -819,8 +841,7 @@
                           "properties": {
                             "layout": "horizontal",
                             "styles": {
-                              "paddingLeft": "70",
-                              "marginBottom": "20"
+                              "paddingLeft": "60"
                             }
                           },
                           "elements": [
@@ -856,7 +877,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid blue",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -880,7 +901,7 @@
                           "properties": {
                             "layout": "horizontal",
                             "styles": {
-                              "marginBottom": "20"
+                              "width": "100%"
                             }
                           },
                           "elements": [
@@ -916,7 +937,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid green",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -963,7 +984,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid blue",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -997,7 +1018,9 @@
                                   "expr": "Result1"
                                 },
                                 "styles": {
-                                  "fontSize": "26"
+                                  "fontSize": "26",
+                                  "minWidth": "1.5em",
+                                  "textAlign": "right"
                                 }
                               },
                               "kind": "Text"
@@ -1011,7 +1034,7 @@
                           "properties": {
                             "layout": "horizontal",
                             "styles": {
-                              "marginBottom": "20"
+                              "width": "100%"
                             }
                           },
                           "elements": [
@@ -1047,7 +1070,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid green",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -1094,7 +1117,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid blue",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -1128,7 +1151,9 @@
                                   "expr": "Result2"
                                 },
                                 "styles": {
-                                  "fontSize": "26"
+                                  "fontSize": "26",
+                                  "minWidth": "1.5em",
+                                  "textAlign": "right"
                                 }
                               },
                               "kind": "Text"
@@ -1140,7 +1165,10 @@
                           "id": "block_72",
                           "name": "Row 4",
                           "properties": {
-                            "layout": "horizontal"
+                            "layout": "horizontal",
+                            "styles": {
+                              "width": "100%"
+                            }
                           },
                           "elements": [
                             {
@@ -1175,7 +1203,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid green",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -1222,7 +1250,7 @@
                                         },
                                         "styles": {
                                           "fontSize": "26",
-                                          "width": "50",
+                                          "width": "40",
                                           "border": "2px solid blue",
                                           "borderRadius": "10",
                                           "textAlign": "center",
@@ -1256,32 +1284,38 @@
                                   "expr": "Result3"
                                 },
                                 "styles": {
-                                  "fontSize": "26"
+                                  "fontSize": "26",
+                                  "minWidth": "1.5em",
+                                  "textAlign": "right"
                                 }
                               },
                               "kind": "Text"
                             }
                           ],
                           "kind": "Block"
+                        },
+                        {
+                          "id": "text_67",
+                          "name": "Target Text",
+                          "properties": {
+                            "content": {
+                              "expr": "'Target: &nbsp;&nbsp;&nbsp;' + (Target ?? null)"
+                            },
+                            "styles": {
+                              "fontSize": "24",
+                              "width": "100%",
+                              "textAlign": "right",
+                              "backgroundColor": "lightgray"
+                            },
+                            "allowHtml": true
+                          },
+                          "kind": "Text"
                         }
                       ],
                       "kind": "Block"
                     }
                   ],
                   "kind": "Block"
-                },
-                {
-                  "id": "text_67",
-                  "name": "Target Text",
-                  "properties": {
-                    "content": {
-                      "expr": "'Your target is ' + (Target ?? null)"
-                    },
-                    "styles": {
-                      "fontSize": "24"
-                    }
-                  },
-                  "kind": "Text"
                 },
                 {
                   "id": "text_68",
@@ -1336,42 +1370,53 @@
                   "kind": "Text"
                 },
                 {
-                  "id": "block_24",
+                  "id": "block_74",
                   "name": "Ended Panel",
                   "properties": {
                     "show": {
                       "expr": "Status == 'Ended'"
+                    },
+                    "styles": {
+                      "position": "absolute",
+                      "top": "0",
+                      "left": "0",
+                      "backgroundColor": "lightblue",
+                      "borderRadius": "10",
+                      "border": "2px solid blue",
+                      "minWidth": "8em",
+                      "padding": "1em",
+                      "width": "8.5em"
                     }
                   },
                   "elements": [
                     {
-                      "id": "text_47",
+                      "id": "text_84",
                       "name": "Title",
                       "properties": {
-                        "content": "Congratulations!",
+                        "content": "Great!",
                         "styles": {
-                          "fontFamily": "\"Jersey 10\"",
-                          "fontSize": "36",
+                          "fontFamily": "Chelsea Market",
+                          "fontSize": "28",
                           "color": "#039a03"
                         }
                       },
                       "kind": "Text"
                     },
                     {
-                      "id": "text_48",
+                      "id": "text_85",
                       "name": "Score",
                       "properties": {
                         "content": {
-                          "expr": "'You have scored ' + Score + ' points!'"
+                          "expr": "'You have scored \\n' + Score + ' points!'"
                         }
                       },
                       "kind": "Text"
                     },
                     {
-                      "id": "text_49",
+                      "id": "text_86",
                       "name": "What next",
                       "properties": {
-                        "content": "Click Start Game to have another go"
+                        "content": "Click Start Game\nto play again"
                       },
                       "kind": "Text"
                     }
@@ -1460,17 +1505,6 @@
               "kind": "Block"
             },
             {
-              "id": "block_28",
-              "name": "Spacer",
-              "properties": {
-                "styles": {
-                  "borderBottom": "2px solid lightgray",
-                  "width": "100%"
-                }
-              },
-              "kind": "Block"
-            },
-            {
               "id": "block_29",
               "name": "Game Controls",
               "properties": {
@@ -1503,7 +1537,8 @@
                     },
                     "show": {
                       "expr": "GameRunning"
-                    }
+                    },
+                    "content": "Stop"
                   },
                   "kind": "Button"
                 },
@@ -1516,7 +1551,8 @@
                     },
                     "show": {
                       "expr": "Status == 'Playing'"
-                    }
+                    },
+                    "content": "Pause"
                   },
                   "kind": "Button"
                 },

@@ -46,7 +46,7 @@ const MainPage_Num1ItemSetItem = React.memo(function MainPage_Num1ItemSetItem(pr
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Num1Text')).styles(elProps(pathTo('Num1Text.Styles')).fontSize('26').width('50').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Num1Text')).styles(elProps(pathTo('Num1Text.Styles')).fontSize('26').width('40').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -62,7 +62,7 @@ const MainPage_Op1ItemSetItem = React.memo(function MainPage_Op1ItemSetItem(prop
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Op1Text')).styles(elProps(pathTo('Op1Text.Styles')).fontSize('26').width('50').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Op1Text')).styles(elProps(pathTo('Op1Text.Styles')).fontSize('26').width('40').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -78,7 +78,7 @@ const MainPage_Num2ItemSetItem = React.memo(function MainPage_Num2ItemSetItem(pr
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Num2Text')).styles(elProps(pathTo('Num2Text.Styles')).fontSize('26').width('50').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Num2Text')).styles(elProps(pathTo('Num2Text.Styles')).fontSize('26').width('40').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -94,7 +94,7 @@ const MainPage_Op2ItemSetItem = React.memo(function MainPage_Op2ItemSetItem(prop
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Op2Text')).styles(elProps(pathTo('Op2Text.Styles')).fontSize('26').width('50').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Op2Text')).styles(elProps(pathTo('Op2Text.Styles')).fontSize('26').width('40').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -110,7 +110,7 @@ const MainPage_Num3ItemSetItem = React.memo(function MainPage_Num3ItemSetItem(pr
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Num3Text')).styles(elProps(pathTo('Num3Text.Styles')).fontSize('26').width('50').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Num3Text')).styles(elProps(pathTo('Num3Text.Styles')).fontSize('26').width('40').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -126,7 +126,7 @@ const MainPage_Op3ItemSetItem = React.memo(function MainPage_Op3ItemSetItem(prop
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Op3Text')).styles(elProps(pathTo('Op3Text.Styles')).fontSize('26').width('50').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Op3Text')).styles(elProps(pathTo('Op3Text.Styles')).fontSize('26').width('40').border('2px solid green').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -142,7 +142,7 @@ const MainPage_Num4ItemSetItem = React.memo(function MainPage_Num4ItemSetItem(pr
     const styles = undefined
 
     return React.createElement(ItemSetItem, {path: props.path, item: $item, itemId: $itemId, index: $index, onClick, canDragItem, styles},
-        React.createElement(TextElement, elProps(pathTo('Num4Text')).styles(elProps(pathTo('Num4Text.Styles')).fontSize('26').width('50').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
+        React.createElement(TextElement, elProps(pathTo('Num4Text')).styles(elProps(pathTo('Num4Text.Styles')).fontSize('26').width('40').border('2px solid blue').borderRadius('10').textAlign('center').height('36').props).content($item).props),
     )
 })
 
@@ -150,9 +150,11 @@ const MainPage_Num4ItemSetItem = React.memo(function MainPage_Num4ItemSetItem(pr
 function MainPage(props) {
     const pathTo = name => props.path + '.' + name
     const {Page, Data, Calculation, Timer, TextElement, Dialog, Button, Block, ItemSet} = Elemento.components
-    const {And, Or, Eq, Not, If, NotNull, Max, RandomListFrom, Range, Shuffle, ItemAt, WithoutItems, IsNull, ListContains, Ceiling} = Elemento.globalFunctions
+    const {And, Or, Eq, Not, If, NotNull, Max, RandomListFrom, Range, Shuffle, ItemAt, Record, WithoutItems, IsNull, ListContains, Ceiling} = Elemento.globalFunctions
     const {Set, Reset} = Elemento.appFunctions
     const _state = Elemento.useGetStore()
+    const app = _state.useObject('MainApp')
+    const {SendMessage, CurrentUrl} = app
     const Status = _state.setObject(pathTo('Status'), new Data.State(stateProps(pathTo('Status')).value('Ready').props))
     const Score = _state.setObject(pathTo('Score'), new Data.State(stateProps(pathTo('Score')).value(0).props))
     const RoundSkipped = _state.setObject(pathTo('RoundSkipped'), new Data.State(stateProps(pathTo('RoundSkipped')).value(false).props))
@@ -160,9 +162,13 @@ function MainPage(props) {
     const Bonus = _state.setObject(pathTo('Bonus'), new Calculation.State(stateProps(pathTo('Bonus')).value(30).props))
     const PointsFactor = _state.setObject(pathTo('PointsFactor'), new Calculation.State(stateProps(pathTo('PointsFactor')).value(1).props))
     const GameRunning = _state.setObject(pathTo('GameRunning'), new Calculation.State(stateProps(pathTo('GameRunning')).value(Or(Status == 'Playing', Status == 'Paused')).props))
+    const SendScore = _state.setObject(pathTo('SendScore'), React.useCallback(wrapFn(pathTo('SendScore'), 'calculation', (score) => {
+        return SendMessage('parent', Record('score', Score, 'url', CurrentUrl().text))
+    }), [Score]))
     const EndGame = _state.setObject(pathTo('EndGame'), React.useCallback(wrapFn(pathTo('EndGame'), 'calculation', () => {
-        return Set(Status, 'Ended')
-    }), [Status]))
+        Set(Status, 'Ended')
+        return SendScore(Score)
+    }), [Status, SendScore, Score]))
     const GameTimer_endAction = React.useCallback(wrapFn(pathTo('GameTimer'), 'endAction', async ($timer) => {
         await EndGame()
     }), [EndGame])
@@ -307,7 +313,6 @@ function MainPage(props) {
     const EndedPanel = _state.setObject(pathTo('EndedPanel'), new Block.State(stateProps(pathTo('EndedPanel')).props))
     const RoundControls = _state.setObject(pathTo('RoundControls'), new Block.State(stateProps(pathTo('RoundControls')).props))
     const PausePanel = _state.setObject(pathTo('PausePanel'), new Block.State(stateProps(pathTo('PausePanel')).props))
-    const Spacer = _state.setObject(pathTo('Spacer'), new Block.State(stateProps(pathTo('Spacer')).props))
     const GameControls = _state.setObject(pathTo('GameControls'), new Block.State(stateProps(pathTo('GameControls')).props))
     const StartGame2_action = React.useCallback(wrapFn(pathTo('StartGame2'), 'action', async () => {
         await StartNewGame()
@@ -357,7 +362,7 @@ function MainPage(props) {
     }), [])
     Elemento.elementoDebug(() => eval(Elemento.useDebugExpr()))
 
-    return React.createElement(Page, elProps(props.path).styles(elProps(pathTo('MainPage.Styles')).paddingTop('0').props).props,
+    return React.createElement(Page, elProps(props.path).styles(elProps(pathTo('MainPage.Styles')).paddingTop('0').gap('4px').props).props,
         React.createElement(Data, elProps(pathTo('Status')).display(false).props),
         React.createElement(Data, elProps(pathTo('Score')).display(false).props),
         React.createElement(Data, elProps(pathTo('RoundSkipped')).display(false).props),
@@ -431,23 +436,23 @@ Click Instructions for full details
 
 Or Start Game to dive straight in!`).props),
     ),
-        React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').props).props,
+        React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').position('relative').props).props,
             React.createElement(Block, elProps(pathTo('PlayLayout')).layout('horizontal').props,
-            React.createElement(Block, elProps(pathTo('StorageLayout')).layout('vertical').styles(elProps(pathTo('StorageLayout.Styles')).backgroundColor('lightblue').props).props,
-            React.createElement(Block, elProps(pathTo('NumbersBlock')).layout('horizontal wrapped').styles(elProps(pathTo('NumbersBlock.Styles')).border('0px solid lightgray').padding('5').width('120').height('120').marginBottom('10').props).props,
+            React.createElement(Block, elProps(pathTo('StorageLayout')).layout('vertical').styles(elProps(pathTo('StorageLayout.Styles')).backgroundColor('lightblue').height('100%').props).props,
+            React.createElement(Block, elProps(pathTo('NumbersBlock')).layout('horizontal wrapped').styles(elProps(pathTo('NumbersBlock.Styles')).border('0px solid lightgray').padding('5').width('120').height('100').gridRowGap('3').props).props,
             React.createElement(ItemSet, elProps(pathTo('NumbersItemSet')).itemContentComponent(MainPage_NumbersItemSetItem).props),
     ),
-            React.createElement(Block, elProps(pathTo('OperationsBlock')).layout('horizontal wrapped').styles(elProps(pathTo('OperationsBlock.Styles')).border('0px solid lightgray').padding('5px').width('120').height('120').props).props,
+            React.createElement(Block, elProps(pathTo('OperationsBlock')).layout('horizontal wrapped').styles(elProps(pathTo('OperationsBlock.Styles')).border('0px solid lightgray').padding('5px').width('120').height('100').gridRowGap('3').props).props,
             React.createElement(ItemSet, elProps(pathTo('OperationsItemSet')).itemContentComponent(MainPage_OperationsItemSetItem).props),
     ),
     ),
-            React.createElement(Block, elProps(pathTo('CalculationLayout')).layout('vertical').props,
-            React.createElement(Block, elProps(pathTo('Row1')).layout('horizontal').styles(elProps(pathTo('Row1.Styles')).paddingLeft('70').marginBottom('20').props).props,
+            React.createElement(Block, elProps(pathTo('CalculationLayout')).layout('vertical').styles(elProps(pathTo('CalculationLayout.Styles')).paddingLeft('2px').gap('12px').paddingBottom('0px !important').props).props,
+            React.createElement(Block, elProps(pathTo('Row1')).layout('horizontal').styles(elProps(pathTo('Row1.Styles')).paddingLeft('60').props).props,
             React.createElement(Block, elProps(pathTo('Num1Position')).layout('none').dropAction(Num1Position_dropAction).styles(elProps(pathTo('Num1Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Num1ItemSet')).itemContentComponent(MainPage_Num1ItemSetItem).props),
     ),
     ),
-            React.createElement(Block, elProps(pathTo('Row2')).layout('horizontal').styles(elProps(pathTo('Row2.Styles')).marginBottom('20').props).props,
+            React.createElement(Block, elProps(pathTo('Row2')).layout('horizontal').styles(elProps(pathTo('Row2.Styles')).width('100%').props).props,
             React.createElement(Block, elProps(pathTo('Op1Position')).layout('none').dropAction(Op1Position_dropAction).styles(elProps(pathTo('Op1Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Op1ItemSet')).itemContentComponent(MainPage_Op1ItemSetItem).props),
     ),
@@ -455,9 +460,9 @@ Or Start Game to dive straight in!`).props),
             React.createElement(ItemSet, elProps(pathTo('Num2ItemSet')).itemContentComponent(MainPage_Num2ItemSetItem).props),
     ),
             React.createElement(TextElement, elProps(pathTo('Equals1')).styles(elProps(pathTo('Equals1.Styles')).fontSize('26').props).content('=').props),
-            React.createElement(TextElement, elProps(pathTo('Result1Display')).styles(elProps(pathTo('Result1Display.Styles')).fontSize('26').props).content(Result1).props),
+            React.createElement(TextElement, elProps(pathTo('Result1Display')).styles(elProps(pathTo('Result1Display.Styles')).fontSize('26').minWidth('1.5em').textAlign('right').props).content(Result1).props),
     ),
-            React.createElement(Block, elProps(pathTo('Row3')).layout('horizontal').styles(elProps(pathTo('Row3.Styles')).marginBottom('20').props).props,
+            React.createElement(Block, elProps(pathTo('Row3')).layout('horizontal').styles(elProps(pathTo('Row3.Styles')).width('100%').props).props,
             React.createElement(Block, elProps(pathTo('Op2Position')).layout('none').dropAction(Op2Position_dropAction).styles(elProps(pathTo('Op2Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Op2ItemSet')).itemContentComponent(MainPage_Op2ItemSetItem).props),
     ),
@@ -465,9 +470,9 @@ Or Start Game to dive straight in!`).props),
             React.createElement(ItemSet, elProps(pathTo('Num3ItemSet')).itemContentComponent(MainPage_Num3ItemSetItem).props),
     ),
             React.createElement(TextElement, elProps(pathTo('Equals2')).styles(elProps(pathTo('Equals2.Styles')).fontSize('26').props).content('=').props),
-            React.createElement(TextElement, elProps(pathTo('Result2Display')).styles(elProps(pathTo('Result2Display.Styles')).fontSize('26').props).content(Result2).props),
+            React.createElement(TextElement, elProps(pathTo('Result2Display')).styles(elProps(pathTo('Result2Display.Styles')).fontSize('26').minWidth('1.5em').textAlign('right').props).content(Result2).props),
     ),
-            React.createElement(Block, elProps(pathTo('Row4')).layout('horizontal').props,
+            React.createElement(Block, elProps(pathTo('Row4')).layout('horizontal').styles(elProps(pathTo('Row4.Styles')).width('100%').props).props,
             React.createElement(Block, elProps(pathTo('Op3Position')).layout('none').dropAction(Op3Position_dropAction).styles(elProps(pathTo('Op3Position.Styles')).props).props,
             React.createElement(ItemSet, elProps(pathTo('Op3ItemSet')).itemContentComponent(MainPage_Op3ItemSetItem).props),
     ),
@@ -475,19 +480,20 @@ Or Start Game to dive straight in!`).props),
             React.createElement(ItemSet, elProps(pathTo('Num4ItemSet')).itemContentComponent(MainPage_Num4ItemSetItem).props),
     ),
             React.createElement(TextElement, elProps(pathTo('Equals3')).styles(elProps(pathTo('Equals3.Styles')).fontSize('26').props).content('=').props),
-            React.createElement(TextElement, elProps(pathTo('Result3Display')).styles(elProps(pathTo('Result3Display.Styles')).fontSize('26').props).content(Result3).props),
+            React.createElement(TextElement, elProps(pathTo('Result3Display')).styles(elProps(pathTo('Result3Display.Styles')).fontSize('26').minWidth('1.5em').textAlign('right').props).content(Result3).props),
+    ),
+            React.createElement(TextElement, elProps(pathTo('TargetText')).allowHtml(true).styles(elProps(pathTo('TargetText.Styles')).fontSize('24').width('100%').textAlign('right').backgroundColor('lightgray').props).content('Target: &nbsp;&nbsp;&nbsp;' + (Target ?? null)).props),
     ),
     ),
-    ),
-            React.createElement(TextElement, elProps(pathTo('TargetText')).styles(elProps(pathTo('TargetText.Styles')).fontSize('24').props).content('Your target is ' + (Target ?? null)).props),
             React.createElement(TextElement, elProps(pathTo('Currentpoints')).show(And(Not(IsRoundComplete), Points() > 0)).content('Getting there - this result will get you ' + Points() + ' points').props),
             React.createElement(TextElement, elProps(pathTo('RoundExact')).show(IsRoundExact).content('Exactly right! ' + PointsScored + ' points added').props),
             React.createElement(TextElement, elProps(pathTo('RoundFailed')).show(IsRoundFailed).content('Sorry - no points for this problem').props),
             React.createElement(TextElement, elProps(pathTo('RoundClose')).show(And(IsRoundComplete, Not(RoundSkipped), Not(IsRoundExact), PointsScored > 0)).content('Close - '  + PointsScored + ' points added').props),
-            React.createElement(Block, elProps(pathTo('EndedPanel')).layout('vertical').show(Status == 'Ended').props,
-            React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).fontFamily('"Jersey 10"').fontSize('36').color('#039a03').props).content('Congratulations!').props),
-            React.createElement(TextElement, elProps(pathTo('Score')).content('You have scored ' + Score + ' points!').props),
-            React.createElement(TextElement, elProps(pathTo('Whatnext')).content('Click Start Game to have another go').props),
+            React.createElement(Block, elProps(pathTo('EndedPanel')).layout('vertical').show(Status == 'Ended').styles(elProps(pathTo('EndedPanel.Styles')).position('absolute').top('0').left('0').backgroundColor('lightblue').borderRadius('10').border('2px solid blue').minWidth('8em').padding('1em').width('8.5em').props).props,
+            React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).fontFamily('Chelsea Market').fontSize('28').color('#039a03').props).content('Great!').props),
+            React.createElement(TextElement, elProps(pathTo('Score')).content('You have scored \n' + Score + ' points!').props),
+            React.createElement(TextElement, elProps(pathTo('Whatnext')).content(`Click Start Game
+to play again`).props),
     ),
             React.createElement(Block, elProps(pathTo('RoundControls')).layout('horizontal').props,
             React.createElement(Button, elProps(pathTo('NewRound')).content('Next Problem').appearance('filled').show(Status == 'Playing' && IsRoundComplete).action(NewRound_action).props),
@@ -498,11 +504,10 @@ Or Start Game to dive straight in!`).props),
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).color('#7529df').fontFamily('"Jersey 10"').fontSize('28').props).content('Paused...').props),
             React.createElement(TextElement, elProps(pathTo('PauseText')).styles(elProps(pathTo('PauseText.Styles')).fontSize('20').props).content('Click Continue Game to carry on').props),
     ),
-        React.createElement(Block, elProps(pathTo('Spacer')).layout('vertical').styles(elProps(pathTo('Spacer.Styles')).borderBottom('2px solid lightgray').width('100%').props).props),
         React.createElement(Block, elProps(pathTo('GameControls')).layout('horizontal').styles(elProps(pathTo('GameControls.Styles')).paddingTop('20px').props).props,
             React.createElement(Button, elProps(pathTo('StartGame')).content('Start Game').appearance('filled').show(Not(GameRunning)).action(StartGame_action).props),
-            React.createElement(Button, elProps(pathTo('StopGame')).content('Stop Game').appearance('outline').show(GameRunning).action(StopGame_action).props),
-            React.createElement(Button, elProps(pathTo('PauseGame')).content('Pause Game').appearance('outline').show(Status == 'Playing').action(PauseGame_action).props),
+            React.createElement(Button, elProps(pathTo('StopGame')).content('Stop').appearance('outline').show(GameRunning).action(StopGame_action).props),
+            React.createElement(Button, elProps(pathTo('PauseGame')).content('Pause').appearance('outline').show(Status == 'Playing').action(PauseGame_action).props),
             React.createElement(Button, elProps(pathTo('ContinueGame')).content('Continue Game').appearance('outline').show(Status == 'Paused').action(ContinueGame_action).props),
             React.createElement(Button, elProps(pathTo('Instructions')).content('Instructions').appearance('outline').action(Instructions_action).props),
     ),
@@ -518,5 +523,5 @@ export default function MainApp(props) {
     const _state = Elemento.useGetStore()
     const app = _state.setObject('MainApp', new App.State({pages, appContext}))
 
-    return React.createElement(App, {...elProps('MainApp').fonts(['Jersey 10']).props},)
+    return React.createElement(App, {...elProps('MainApp').maxWidth(500).fonts(['Jersey 10']).props},)
 }
