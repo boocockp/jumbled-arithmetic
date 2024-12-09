@@ -52,55 +52,11 @@
               "kind": "Data"
             },
             {
-              "id": "calculation_36",
-              "name": "Points Threshold",
-              "properties": {
-                "calculation": {
-                  "expr": "20"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_37",
-              "name": "Bonus",
-              "properties": {
-                "calculation": {
-                  "expr": "30"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_38",
-              "name": "Points Factor",
-              "properties": {
-                "calculation": {
-                  "expr": "1"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
               "id": "calculation_21",
               "name": "Is Round Won",
               "properties": {
                 "calculation": {
                   "expr": "PointsScored > 0"
-                },
-                "show": false
-              },
-              "kind": "Calculation"
-            },
-            {
-              "id": "calculation_35",
-              "name": "Is Round Exact",
-              "properties": {
-                "calculation": {
-                  "expr": "ResultExact"
                 },
                 "show": false
               },
@@ -178,25 +134,37 @@
               "kind": "Timer"
             },
             {
-              "id": "function_7",
-              "name": "Points",
+              "id": "calculation_36",
+              "name": "Points Threshold",
               "properties": {
                 "calculation": {
-                  "expr": "let gap = Math.abs(Target - Result)\nlet bonus = If(Eq(Target, Result), Bonus, 0)\nlet res = If(NotNull(Result), Max(0, (PointsThreshold - gap) * PointsFactor) + bonus, 0)\n//Log('Points', res)\nres\n"
-                }
+                  "expr": "20"
+                },
+                "show": false
               },
-              "kind": "Function"
+              "kind": "Calculation"
             },
             {
-              "id": "function_8",
-              "name": "Setup New Round",
+              "id": "calculation_37",
+              "name": "Bonus",
               "properties": {
-                "action": true,
                 "calculation": {
-                  "expr": "let numbers = RandomListFrom(Range(3, 12), 4)\nlet ops = Shuffle(['+', '-', 'x'])\nlet op1 = ops[0], op2 = ops[1], op3 = ops[2]\nlet num1 = numbers[0], num2 = numbers[1], num3 = numbers[2], num4 = numbers[3]\nlet result1 = Calc(num1, op1, num2)\nlet result2 = Calc(result1, op2, num3)\nlet result3 = Calc(result2, op3, num4)\nSet(CorrectNumbers, numbers)\nSet(CorrectOperations, ops)\nSet(Operations, Shuffle(ops))\nSet(Numbers, Shuffle(numbers))\nSet(Target, result3)\nReset(Num1, Num2, Num3, Num4)\nReset(Op1, Op2, Op3)\nReset(PointsScored, ResultExact)"
-                }
+                  "expr": "30"
+                },
+                "show": false
               },
-              "kind": "Function"
+              "kind": "Calculation"
+            },
+            {
+              "id": "calculation_38",
+              "name": "Points Factor",
+              "properties": {
+                "calculation": {
+                  "expr": "1"
+                },
+                "show": false
+              },
+              "kind": "Calculation"
             },
             {
               "id": "function_9",
@@ -243,6 +211,17 @@
               "kind": "Function"
             },
             {
+              "id": "function_18",
+              "name": "Stop Game",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "GameTimer.Stop()\nEndGame()"
+                }
+              },
+              "kind": "Function"
+            },
+            {
               "id": "function_13",
               "name": "Pause Game",
               "properties": {
@@ -271,7 +250,7 @@
                 "input1": "score",
                 "action": true,
                 "calculation": {
-                  "expr": "SendMessage('parent', Record('score', Score, 'url', CurrentUrl().text))"
+                  "expr": "Log('Send Score', score.value)\nSendMessage('parent', Record('score', Score, 'url', CurrentUrl().text))"
                 }
               },
               "kind": "Function"
@@ -313,6 +292,27 @@
               "name": "Operations",
               "properties": {},
               "kind": "Data"
+            },
+            {
+              "id": "function_7",
+              "name": "Points",
+              "properties": {
+                "calculation": {
+                  "expr": "let gap = Math.abs(Target - Result)\nlet bonus = If(Eq(Target, Result), Bonus, 0)\nlet res = If(NotNull(Result), Max(0, (PointsThreshold - gap) * PointsFactor) + bonus, 0)\n//Log('Points', res)\nres\n"
+                }
+              },
+              "kind": "Function"
+            },
+            {
+              "id": "function_8",
+              "name": "Setup New Round",
+              "properties": {
+                "action": true,
+                "calculation": {
+                  "expr": "let numbers = RandomListFrom(Range(3, 12), 4)\nlet ops = Shuffle(['+', '-', 'x'])\nlet op1 = ops[0], op2 = ops[1], op3 = ops[2]\nlet num1 = numbers[0], num2 = numbers[1], num3 = numbers[2], num4 = numbers[3]\nlet result1 = Calc(num1, op1, num2)\nlet result2 = Calc(result1, op2, num3)\nlet result3 = Calc(result2, op3, num4)\nSet(CorrectNumbers, numbers)\nSet(CorrectOperations, ops)\nSet(Operations, Shuffle(ops))\nSet(Numbers, Shuffle(numbers))\nSet(Target, result3)\nReset(Num1, Num2, Num3, Num4)\nReset(Op1, Op2, Op3)\nReset(PointsScored, ResultExact)"
+                }
+              },
+              "kind": "Function"
             },
             {
               "id": "data_8",
@@ -1304,7 +1304,7 @@
                             "styles": {
                               "fontSize": "24",
                               "width": "100%",
-                              "textAlign": "right",
+                              "textAlign": "center",
                               "backgroundColor": "lightgray"
                             },
                             "allowHtml": true
@@ -1322,7 +1322,7 @@
                   "name": "Current points",
                   "properties": {
                     "content": {
-                      "expr": "'Getting there - this result will get you ' + Points() + ' points'"
+                      "expr": "'Getting there -  ' + Points() + ' points for this result'"
                     },
                     "show": {
                       "expr": "And(Not(IsRoundComplete), Points() > 0)"
@@ -1338,7 +1338,7 @@
                       "expr": "'Exactly right! ' + PointsScored + ' points added'"
                     },
                     "show": {
-                      "expr": "IsRoundExact"
+                      "expr": "ResultExact"
                     }
                   },
                   "kind": "Text"
@@ -1364,7 +1364,7 @@
                       "expr": "'Close - '  + PointsScored + ' points added'"
                     },
                     "show": {
-                      "expr": "And(IsRoundComplete, Not(RoundSkipped), Not(IsRoundExact), PointsScored > 0)"
+                      "expr": "And(IsRoundComplete, Not(RoundSkipped), Not(ResultExact), PointsScored > 0)"
                     }
                   },
                   "kind": "Text"

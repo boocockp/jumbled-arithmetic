@@ -150,36 +150,41 @@ const MainPage_Num4ItemSetItem = React.memo(function MainPage_Num4ItemSetItem(pr
 function MainPage(props) {
     const pathTo = name => props.path + '.' + name
     const {Page, Data, Calculation, Timer, TextElement, Dialog, Button, Block, ItemSet} = Elemento.components
-    const {And, Or, Eq, Not, If, NotNull, Max, RandomListFrom, Range, Shuffle, ItemAt, Record, WithoutItems, IsNull, ListContains, Ceiling} = Elemento.globalFunctions
-    const {Set, Reset} = Elemento.appFunctions
+    const {And, Or, Eq, Not, ItemAt, Log, Record, If, NotNull, Max, RandomListFrom, Range, Shuffle, WithoutItems, IsNull, ListContains, Ceiling} = Elemento.globalFunctions
+    const {Reset, Set} = Elemento.appFunctions
     const _state = Elemento.useGetStore()
     const app = _state.useObject('MainApp')
     const {SendMessage, CurrentUrl} = app
     const Status = _state.setObject(pathTo('Status'), new Data.State(stateProps(pathTo('Status')).value('Ready').props))
     const Score = _state.setObject(pathTo('Score'), new Data.State(stateProps(pathTo('Score')).value(0).props))
     const RoundSkipped = _state.setObject(pathTo('RoundSkipped'), new Data.State(stateProps(pathTo('RoundSkipped')).value(false).props))
+    const GameRunning = _state.setObject(pathTo('GameRunning'), new Calculation.State(stateProps(pathTo('GameRunning')).value(Or(Status == 'Playing', Status == 'Paused')).props))
     const PointsThreshold = _state.setObject(pathTo('PointsThreshold'), new Calculation.State(stateProps(pathTo('PointsThreshold')).value(20).props))
     const Bonus = _state.setObject(pathTo('Bonus'), new Calculation.State(stateProps(pathTo('Bonus')).value(30).props))
     const PointsFactor = _state.setObject(pathTo('PointsFactor'), new Calculation.State(stateProps(pathTo('PointsFactor')).value(1).props))
-    const GameRunning = _state.setObject(pathTo('GameRunning'), new Calculation.State(stateProps(pathTo('GameRunning')).value(Or(Status == 'Playing', Status == 'Paused')).props))
-    const SendScore = _state.setObject(pathTo('SendScore'), React.useCallback(wrapFn(pathTo('SendScore'), 'calculation', (score) => {
-        return SendMessage('parent', Record('score', Score, 'url', CurrentUrl().text))
+    const SendScore = _state.setObject(pathTo('SendScore'), React.useCallback(wrapFn(pathTo('SendScore'), 'calculation', async (score) => {
+        Log('Send Score', score.value)
+        await SendMessage('parent', Record('score', Score, 'url', (await CurrentUrl()).text))
     }), [Score]))
-    const EndGame = _state.setObject(pathTo('EndGame'), React.useCallback(wrapFn(pathTo('EndGame'), 'calculation', () => {
+    const EndGame = _state.setObject(pathTo('EndGame'), React.useCallback(wrapFn(pathTo('EndGame'), 'calculation', async () => {
         Set(Status, 'Ended')
-        return SendScore(Score)
+        await SendScore(Score)
     }), [Status, SendScore, Score]))
     const GameTimer_endAction = React.useCallback(wrapFn(pathTo('GameTimer'), 'endAction', async ($timer) => {
         await EndGame()
     }), [EndGame])
     const GameTimer = _state.setObject(pathTo('GameTimer'), new Timer.State(stateProps(pathTo('GameTimer')).period(180).interval(1).endAction(GameTimer_endAction).props))
-    const PauseGame = _state.setObject(pathTo('PauseGame'), React.useCallback(wrapFn(pathTo('PauseGame'), 'calculation', () => {
+    const StopGame = _state.setObject(pathTo('StopGame'), React.useCallback(wrapFn(pathTo('StopGame'), 'calculation', async () => {
+        await GameTimer.Stop()
+        await EndGame()
+    }), [GameTimer, EndGame]))
+    const PauseGame = _state.setObject(pathTo('PauseGame'), React.useCallback(wrapFn(pathTo('PauseGame'), 'calculation', async () => {
         Set(Status, 'Paused')
-        return GameTimer.Stop()
+        await GameTimer.Stop()
     }), [Status, GameTimer]))
-    const ContinueGame = _state.setObject(pathTo('ContinueGame'), React.useCallback(wrapFn(pathTo('ContinueGame'), 'calculation', () => {
+    const ContinueGame = _state.setObject(pathTo('ContinueGame'), React.useCallback(wrapFn(pathTo('ContinueGame'), 'calculation', async () => {
         Set(Status, 'Playing')
-        return GameTimer.Start()
+        await GameTimer.Start()
     }), [Status, GameTimer]))
     const CorrectNumbers = _state.setObject(pathTo('CorrectNumbers'), new Data.State(stateProps(pathTo('CorrectNumbers')).props))
     const CorrectOperations = _state.setObject(pathTo('CorrectOperations'), new Data.State(stateProps(pathTo('CorrectOperations')).props))
@@ -198,7 +203,6 @@ function MainPage(props) {
     const PointsScored = _state.setObject(pathTo('PointsScored'), new Data.State(stateProps(pathTo('PointsScored')).value(0).props))
     const IsRoundWon = _state.setObject(pathTo('IsRoundWon'), new Calculation.State(stateProps(pathTo('IsRoundWon')).value(PointsScored > 0).props))
     const ResultExact = _state.setObject(pathTo('ResultExact'), new Data.State(stateProps(pathTo('ResultExact')).value(false).props))
-    const IsRoundExact = _state.setObject(pathTo('IsRoundExact'), new Calculation.State(stateProps(pathTo('IsRoundExact')).value(ResultExact).props))
     const Calc = _state.setObject(pathTo('Calc'), React.useCallback(wrapFn(pathTo('Calc'), 'calculation', (a, op, b) => {
         return If(Or(IsNull(a), IsNull(b)), null, () => If(op == '+', () => a + b, () => If(op == '-', () => a - b, () => If(op == 'x', () => a * b, null))))
     }), []))
@@ -217,18 +221,18 @@ function MainPage(props) {
         Set(Target, result3)
         Reset(Num1, Num2, Num3, Num4)
         Reset(Op1, Op2, Op3)
-        return Reset(PointsScored, ResultExact)
+        Reset(PointsScored, ResultExact)
     }), [Calc, CorrectNumbers, CorrectOperations, Operations, Numbers, Target, Num1, Num2, Num3, Num4, Op1, Op2, Op3, PointsScored, ResultExact]))
-    const StartNewRound = _state.setObject(pathTo('StartNewRound'), React.useCallback(wrapFn(pathTo('StartNewRound'), 'calculation', () => {
+    const StartNewRound = _state.setObject(pathTo('StartNewRound'), React.useCallback(wrapFn(pathTo('StartNewRound'), 'calculation', async () => {
         Reset(RoundSkipped)
-        return SetupNewRound()
+        await SetupNewRound()
     }), [RoundSkipped, SetupNewRound]))
-    const StartNewGame = _state.setObject(pathTo('StartNewGame'), React.useCallback(wrapFn(pathTo('StartNewGame'), 'calculation', () => {
+    const StartNewGame = _state.setObject(pathTo('StartNewGame'), React.useCallback(wrapFn(pathTo('StartNewGame'), 'calculation', async () => {
         Reset(Score)
         Reset(GameTimer)
         Set(Status, 'Playing')
-        StartNewRound()
-        return GameTimer.Start()
+        await StartNewRound()
+        await GameTimer.Start()
     }), [Score, GameTimer, Status, StartNewRound]))
     const Result1 = _state.setObject(pathTo('Result1'), new Calculation.State(stateProps(pathTo('Result1')).value(Calc(Num1, Op1, Num2)).props))
     const Result2 = _state.setObject(pathTo('Result2'), new Calculation.State(stateProps(pathTo('Result2')).value(Calc(Result1, Op2, Num3)).props))
@@ -253,33 +257,33 @@ function MainPage(props) {
         Set(Num4, ItemAt(CorrectNumbers, 3))
         Set(Op1, ItemAt(CorrectOperations, 0))
         Set(Op2, ItemAt(CorrectOperations, 1))
-        return Set(Op3, ItemAt(CorrectOperations, 2))
+        Set(Op3, ItemAt(CorrectOperations, 2))
     }), [Score, Points, PointsScored, ResultExact, Target, Result, Num1, CorrectNumbers, Num2, Num3, Num4, Op1, CorrectOperations, Op2, Op3]))
     const WhenRoundComplete_whenTrueAction = React.useCallback(wrapFn(pathTo('WhenRoundComplete'), 'whenTrueAction', async () => {
         await EndRound()
     }), [EndRound])
     const WhenRoundComplete = _state.setObject(pathTo('WhenRoundComplete'), new Calculation.State(stateProps(pathTo('WhenRoundComplete')).value(IsRoundComplete).whenTrueAction(WhenRoundComplete_whenTrueAction).props))
-    const Clear = _state.setObject(pathTo('Clear'), React.useCallback(wrapFn(pathTo('Clear'), 'calculation', (data, item) => {
-        return If(Eq(data, item), () => Set(data, null))
+    const Clear = _state.setObject(pathTo('Clear'), React.useCallback(wrapFn(pathTo('Clear'), 'calculation', async (data, item) => {
+        await If(Eq(data, item), () => Set(data, null))
     }), []))
-    const ClearAll = _state.setObject(pathTo('ClearAll'), React.useCallback(wrapFn(pathTo('ClearAll'), 'calculation', (item) => {
-        Clear(Op1, item)
-        Clear(Op2, item)
-        Clear(Op3, item)
-        Clear(Num1, item)
-        Clear(Num2, item)
-        Clear(Num3, item)
-        return Clear(Num4, item)
+    const ClearAll = _state.setObject(pathTo('ClearAll'), React.useCallback(wrapFn(pathTo('ClearAll'), 'calculation', async (item) => {
+        await Clear(Op1, item)
+        await Clear(Op2, item)
+        await Clear(Op3, item)
+        await Clear(Num1, item)
+        await Clear(Num2, item)
+        await Clear(Num3, item)
+        await Clear(Num4, item)
     }), [Clear, Op1, Op2, Op3, Num1, Num2, Num3, Num4]))
-    const ClearAndSet = _state.setObject(pathTo('ClearAndSet'), React.useCallback(wrapFn(pathTo('ClearAndSet'), 'calculation', (data, item) => {
-        ClearAll(item)
-        return Set(data, item)
+    const ClearAndSet = _state.setObject(pathTo('ClearAndSet'), React.useCallback(wrapFn(pathTo('ClearAndSet'), 'calculation', async (data, item) => {
+        await ClearAll(item)
+        Set(data, item)
     }), [ClearAll]))
-    const ClearAndSetOp = _state.setObject(pathTo('ClearAndSetOp'), React.useCallback(wrapFn(pathTo('ClearAndSetOp'), 'calculation', (data, item) => {
-        return If(ListContains(Operations, item), () => ClearAndSet(data, item))
+    const ClearAndSetOp = _state.setObject(pathTo('ClearAndSetOp'), React.useCallback(wrapFn(pathTo('ClearAndSetOp'), 'calculation', async (data, item) => {
+        await If(ListContains(Operations, item), async () => await ClearAndSet(data, item))
     }), [Operations, ClearAndSet]))
-    const ClearAndSetNum = _state.setObject(pathTo('ClearAndSetNum'), React.useCallback(wrapFn(pathTo('ClearAndSetNum'), 'calculation', (data, item) => {
-        return If(ListContains(Numbers, item), () => ClearAndSet(data, item))
+    const ClearAndSetNum = _state.setObject(pathTo('ClearAndSetNum'), React.useCallback(wrapFn(pathTo('ClearAndSetNum'), 'calculation', async (data, item) => {
+        await If(ListContains(Numbers, item), async () => await ClearAndSet(data, item))
     }), [Numbers, ClearAndSet]))
     const Instructions = _state.setObject(pathTo('Instructions'), new Dialog.State(stateProps(pathTo('Instructions')).initiallyOpen(false).props))
     const StatsLayout = _state.setObject(pathTo('StatsLayout'), new Block.State(stateProps(pathTo('StatsLayout')).props))
@@ -353,30 +357,29 @@ function MainPage(props) {
     }), [EndGame])
     const PauseGame_action = React.useCallback(wrapFn(pathTo('PauseGame'), 'action', async () => {
         await PauseGame()
-    }), [])
+    }), [PauseGame])
     const ContinueGame_action = React.useCallback(wrapFn(pathTo('ContinueGame'), 'action', async () => {
         await ContinueGame()
-    }), [])
+    }), [ContinueGame])
     const Instructions_action = React.useCallback(wrapFn(pathTo('Instructions'), 'action', async () => {
         await Instructions.Show()
-    }), [])
+    }), [Instructions])
     Elemento.elementoDebug(() => eval(Elemento.useDebugExpr()))
 
     return React.createElement(Page, elProps(props.path).styles(elProps(pathTo('MainPage.Styles')).paddingTop('0').gap('4px').props).props,
         React.createElement(Data, elProps(pathTo('Status')).display(false).props),
         React.createElement(Data, elProps(pathTo('Score')).display(false).props),
         React.createElement(Data, elProps(pathTo('RoundSkipped')).display(false).props),
-        React.createElement(Calculation, elProps(pathTo('PointsThreshold')).show(false).props),
-        React.createElement(Calculation, elProps(pathTo('Bonus')).show(false).props),
-        React.createElement(Calculation, elProps(pathTo('PointsFactor')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('IsRoundWon')).show(false).props),
-        React.createElement(Calculation, elProps(pathTo('IsRoundExact')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('IsRoundFailed')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('WhenRoundComplete')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('IsRoundComplete')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('RoundInPlay')).show(false).props),
         React.createElement(Calculation, elProps(pathTo('GameRunning')).show(false).props),
         React.createElement(Timer, elProps(pathTo('GameTimer')).show(false).props),
+        React.createElement(Calculation, elProps(pathTo('PointsThreshold')).show(false).props),
+        React.createElement(Calculation, elProps(pathTo('Bonus')).show(false).props),
+        React.createElement(Calculation, elProps(pathTo('PointsFactor')).show(false).props),
         React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).fontWeight('bold').fontFamily('"Jersey 10"').fontSize('36').color('blue').props).content('Sum Mix-up').props),
         React.createElement(Data, elProps(pathTo('CorrectNumbers')).display(false).props),
         React.createElement(Data, elProps(pathTo('CorrectOperations')).display(false).props),
@@ -482,13 +485,13 @@ Or Start Game to dive straight in!`).props),
             React.createElement(TextElement, elProps(pathTo('Equals3')).styles(elProps(pathTo('Equals3.Styles')).fontSize('26').props).content('=').props),
             React.createElement(TextElement, elProps(pathTo('Result3Display')).styles(elProps(pathTo('Result3Display.Styles')).fontSize('26').minWidth('1.5em').textAlign('right').props).content(Result3).props),
     ),
-            React.createElement(TextElement, elProps(pathTo('TargetText')).allowHtml(true).styles(elProps(pathTo('TargetText.Styles')).fontSize('24').width('100%').textAlign('right').backgroundColor('lightgray').props).content('Target: &nbsp;&nbsp;&nbsp;' + (Target ?? null)).props),
+            React.createElement(TextElement, elProps(pathTo('TargetText')).allowHtml(true).styles(elProps(pathTo('TargetText.Styles')).fontSize('24').width('100%').textAlign('center').backgroundColor('lightgray').props).content('Target: &nbsp;&nbsp;&nbsp;' + (Target ?? null)).props),
     ),
     ),
-            React.createElement(TextElement, elProps(pathTo('Currentpoints')).show(And(Not(IsRoundComplete), Points() > 0)).content('Getting there - this result will get you ' + Points() + ' points').props),
-            React.createElement(TextElement, elProps(pathTo('RoundExact')).show(IsRoundExact).content('Exactly right! ' + PointsScored + ' points added').props),
+            React.createElement(TextElement, elProps(pathTo('Currentpoints')).show(And(Not(IsRoundComplete), Points() > 0)).content('Getting there -  ' + Points() + ' points for this result').props),
+            React.createElement(TextElement, elProps(pathTo('RoundExact')).show(ResultExact).content('Exactly right! ' + PointsScored + ' points added').props),
             React.createElement(TextElement, elProps(pathTo('RoundFailed')).show(IsRoundFailed).content('Sorry - no points for this problem').props),
-            React.createElement(TextElement, elProps(pathTo('RoundClose')).show(And(IsRoundComplete, Not(RoundSkipped), Not(IsRoundExact), PointsScored > 0)).content('Close - '  + PointsScored + ' points added').props),
+            React.createElement(TextElement, elProps(pathTo('RoundClose')).show(And(IsRoundComplete, Not(RoundSkipped), Not(ResultExact), PointsScored > 0)).content('Close - '  + PointsScored + ' points added').props),
             React.createElement(Block, elProps(pathTo('EndedPanel')).layout('vertical').show(Status == 'Ended').styles(elProps(pathTo('EndedPanel.Styles')).position('absolute').top('0').left('0').backgroundColor('lightblue').borderRadius('10').border('2px solid blue').minWidth('8em').padding('1em').width('8.5em').props).props,
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).fontFamily('Chelsea Market').fontSize('28').color('#039a03').props).content('Great!').props),
             React.createElement(TextElement, elProps(pathTo('Score')).content('You have scored \n' + Score + ' points!').props),
