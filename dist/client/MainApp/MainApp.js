@@ -353,15 +353,15 @@ function MainPage(props) {
         await StartNewGame()
     }), [StartNewGame])
     const StopGame_action = React.useCallback(wrapFn(pathTo('StopGame'), 'action', async () => {
-        await EndGame()
-    }), [EndGame])
+        await StopGame()
+    }), [StopGame])
     const PauseGame_action = React.useCallback(wrapFn(pathTo('PauseGame'), 'action', async () => {
         await PauseGame()
     }), [PauseGame])
     const ContinueGame_action = React.useCallback(wrapFn(pathTo('ContinueGame'), 'action', async () => {
         await ContinueGame()
     }), [ContinueGame])
-    const Instructions_action = React.useCallback(wrapFn(pathTo('Instructions'), 'action', async () => {
+    const Help_action = React.useCallback(wrapFn(pathTo('Help'), 'action', async () => {
         await Instructions.Show()
     }), [Instructions])
     Elemento.elementoDebug(() => eval(Elemento.useDebugExpr()))
@@ -426,18 +426,26 @@ You have 3 minutes to do as many as you can.
 `).props),
             React.createElement(Button, elProps(pathTo('StartGame2')).content('Start Game').appearance('filled').show(Not(GameRunning)).action(StartGame2_action).props),
     ),
-        React.createElement(Block, elProps(pathTo('StatsLayout')).layout('horizontal wrapped').styles(elProps(pathTo('StatsLayout.Styles')).fontSize('24').props).props,
-            React.createElement(TextElement, elProps(pathTo('ScoreDisplay')).show(Or(GameRunning, Status == 'Ended')).styles(elProps(pathTo('ScoreDisplay.Styles')).fontSize('inherit').color('blue').marginRight('100').props).content(Score + ' points').props),
+        React.createElement(Block, elProps(pathTo('StatsLayout')).layout('horizontal wrapped').styles(elProps(pathTo('StatsLayout.Styles')).fontSize('24').width('100%').justifyContent('space-between').props).props,
+            React.createElement(TextElement, elProps(pathTo('ScoreDisplay')).show(Or(GameRunning, Status == 'Ended')).styles(elProps(pathTo('ScoreDisplay.Styles')).fontSize('inherit').color('blue').props).content(Score + ' points').props),
             React.createElement(TextElement, elProps(pathTo('TimeDisplay')).show(GameRunning).styles(elProps(pathTo('TimeDisplay.Styles')).fontSize('inherit').color('green').props).content(Ceiling(GameTimer. remainingTime) + 's left').props),
             React.createElement(TextElement, elProps(pathTo('GameOver')).show(Status == 'Ended').styles(elProps(pathTo('GameOver.Styles')).fontSize('inherit').color('white').backgroundColor('green').padding('0 0.5em').borderRadius('8px').props).content('Game Over').props),
     ),
         React.createElement(Block, elProps(pathTo('ReadyPanel')).layout('vertical').show(Status == 'Ready').styles(elProps(pathTo('ReadyPanel.Styles')).padding('0').props).props,
             React.createElement(TextElement, elProps(pathTo('Title')).styles(elProps(pathTo('Title.Styles')).color('blue').fontFamily('"Jersey 10"').fontSize('36').props).content('Welcome!').props),
-            React.createElement(TextElement, elProps(pathTo('ReadyText')).styles(elProps(pathTo('ReadyText.Styles')).fontSize('20').props).content(`Sort out jumbled arithmetic problems to give the right answer.
+            React.createElement(TextElement, elProps(pathTo('ReadyText')).allowHtml(true).styles(elProps(pathTo('ReadyText.Styles')).fontSize('20').props).content(`Sort out jumbled arithmetic problems to give the right answer.
+
 
 Click Instructions for full details
 
-Or Start Game to dive straight in!`).props),
+
+Or Start Game to dive straight in!
+
+
+<em>Warning: this puzzle is much harder than it looks - don't be discouraged!</em>
+
+
+`).props),
     ),
         React.createElement(Block, elProps(pathTo('PlayPanel')).layout('vertical').show(Or(Status == 'Playing', Status == 'Ended')).styles(elProps(pathTo('PlayPanel.Styles')).width('100%').padding('0').position('relative').props).props,
             React.createElement(Block, elProps(pathTo('PlayLayout')).layout('horizontal').props,
@@ -512,7 +520,7 @@ to play again`).props),
             React.createElement(Button, elProps(pathTo('StopGame')).content('Stop').appearance('outline').show(GameRunning).action(StopGame_action).props),
             React.createElement(Button, elProps(pathTo('PauseGame')).content('Pause').appearance('outline').show(Status == 'Playing').action(PauseGame_action).props),
             React.createElement(Button, elProps(pathTo('ContinueGame')).content('Continue Game').appearance('outline').show(Status == 'Paused').action(ContinueGame_action).props),
-            React.createElement(Button, elProps(pathTo('Instructions')).content('Instructions').appearance('outline').action(Instructions_action).props),
+            React.createElement(Button, elProps(pathTo('Help')).content('Help').appearance('outline').action(Help_action).props),
     ),
     )
 }

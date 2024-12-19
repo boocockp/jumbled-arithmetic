@@ -588,7 +588,9 @@
               "properties": {
                 "layout": "horizontal wrapped",
                 "styles": {
-                  "fontSize": "24"
+                  "fontSize": "24",
+                  "width": "100%",
+                  "justifyContent": "space-between"
                 }
               },
               "elements": [
@@ -601,8 +603,7 @@
                     },
                     "styles": {
                       "fontSize": "inherit",
-                      "color": "blue",
-                      "marginRight": "100"
+                      "color": "blue"
                     },
                     "show": {
                       "expr": "Or(GameRunning, Status == 'Ended')"
@@ -677,10 +678,11 @@
                   "id": "text_43",
                   "name": "Ready Text",
                   "properties": {
-                    "content": "Sort out jumbled arithmetic problems to give the right answer.\n\nClick Instructions for full details\n\nOr Start Game to dive straight in!",
+                    "content": "Sort out jumbled arithmetic problems to give the right answer.\n\n\nClick Instructions for full details\n\n\nOr Start Game to dive straight in!\n\n\n<em>Warning: this puzzle is much harder than it looks - don't be discouraged!</em>\n\n\n",
                     "styles": {
                       "fontSize": "20"
-                    }
+                    },
+                    "allowHtml": true
                   },
                   "kind": "Text"
                 }
@@ -1533,7 +1535,7 @@
                   "name": "Stop Game",
                   "properties": {
                     "action": {
-                      "expr": "EndGame()"
+                      "expr": "StopGame()"
                     },
                     "show": {
                       "expr": "GameRunning"
@@ -1571,7 +1573,7 @@
                 },
                 {
                   "id": "button_10",
-                  "name": "Instructions",
+                  "name": "Help",
                   "properties": {
                     "action": {
                       "expr": "Instructions.Show()"
